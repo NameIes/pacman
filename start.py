@@ -1,5 +1,6 @@
 import sys
 import pygame
+from objects.ghost import GhostObject
 
 
 def main():
