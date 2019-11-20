@@ -12,19 +12,14 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode(size)
 
-    # Пример
     # TODO: подставлять координаты спавна приведений из нашего уровня
+
     lst = [
-        Blinky(10, 10, direction='right'),
-        Pinky(750, 10, direction='down'),
-        Inky(750, 550, direction='left'),
-        Clyde(10, 550, direction='up'),
-        Blinky(300, 200, direction='right'),
-        Blinky(500, 400, direction='left')
+        Blinky(360, 220, direction='right'),
+        Pinky(360, 220, direction='down'),
+        Inky(360, 220, direction='left'),
+        Clyde(360, 220, direction='up'),
     ]
-    lst[-2].scared = True
-    lst[-1].is_death = True
-    #
 
     game_over = False
     while not game_over:
@@ -35,7 +30,6 @@ def main():
         screen.fill(black)
 
         show_field(screen, pole_xy, (0, 0, 127))
-        # Пример
         for i in lst:
             i.process_logic()
             i.process_draw(screen)

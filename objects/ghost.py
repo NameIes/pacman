@@ -3,9 +3,9 @@ import pygame
 
 class GhostBase:
     scared = 'res/img/scared.png'
-    direction_speed = {'up': [0, -1], 'down': [0, 1], 'left': [-1, 0], 'right': [1, 0]}
+    direction_vector = {'up': [0, -1], 'down': [0, 1], 'left': [-1, 0], 'right': [1, 0]}
 
-    def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None):
+    def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None, speed=1):
         self.pacman_rect = pacman_rect  # Будет нужно для ИИ движения
 
         self.images = None
@@ -17,19 +17,26 @@ class GhostBase:
         self.anim_stage = True
 
         self.direction = direction
+        self.direction_speed = GhostBase.direction_vector.copy()
+        self.set_speed(speed)
         self.scared = False
-        self.is_death = False
-        self.speed = GhostBase.direction_speed[direction]
+        self.is_dead = False
 
-    #TODO: Реализовать общую функцию движения при напуганности
+    def set_speed(self, speed):
+        for item in self.direction_speed:
+            self.direction_speed[item][0] *= speed
+            self.direction_speed[item][1] *= speed
 
+    def scared_move(self):
+        # TODO: Реализовать движение при испуге
+        pass
 
-    def process_logic(self):
-        #TODO: Реализовать алгоритм движения по корридорам ()
-        self.rect.x += self.speed[0]
-        self.rect.y += self.speed[1]
-        # TODO: выделить дальнейший код в отдельную функцию, вызывать ее при process logic у потомков
-        if not self.scared or self.is_death:  # Анимация
+    def death_move(self):
+        # TODO: Реализовать движение на спавн после смерти
+        pass
+
+    def image_controller(self):
+        if not self.scared or self.is_dead:  # Анимация
             self.timer += 1
             if self.timer == self.anim_speed:
                 self.image = self.images[1 if self.anim_stage else 0]
@@ -39,9 +46,21 @@ class GhostBase:
         elif self.scared:  # Напуган, когда съедено большое зерно
             self.image = pygame.image.load(GhostBase.scared)
 
+    def process_logic(self):
+        # TODO: Реализовать алгоритм движения по коридорам ()
+
+        self.rect.x += self.direction_speed[self.direction][0]
+        self.rect.y += self.direction_speed[self.direction][1]
+
+        self.image_controller()
+
+    def _set_pupil_pos(self, screen, left, right):
+        pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + left[0], self.rect[1] + left[1], 4, 5))
+        pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + right[0], self.rect[1] + right[1], 4, 5))
+
     def process_draw(self, screen):
         # Когда съеден пакманом, на базу бегут только глаза
-        if not self.is_death:
+        if not self.is_dead:
             screen.blit(self.image, self.rect)
 
         if self.scared:
@@ -53,18 +72,13 @@ class GhostBase:
 
         # Зрачки поворачиваются в сторону движения
         if self.direction == 'up':
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 6, self.rect[1] + 6, 4, 5))
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 18, self.rect[1] + 6, 4, 5))
+            self._set_pupil_pos(screen, (6, 6), (18, 6))
         elif self.direction == 'down':
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 6, self.rect[1] + 11, 4, 5))
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 18, self.rect[1] + 11, 4, 5))
+            self._set_pupil_pos(screen, (6, 11), (18, 11))
         elif self.direction == 'left':
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 4, self.rect[1] + 9, 4, 5))
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 16, self.rect[1] + 9, 4, 5))
+            self._set_pupil_pos(screen, (4, 9), (16, 9))
         elif self.direction == 'right':
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 8, self.rect[1] + 9, 4, 5))
-            pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + 20, self.rect[1] + 9, 4, 5))
+            self._set_pupil_pos(screen, (8, 9), (20, 9))
 
     def set_direction(self, direction):
         self.direction = direction
-        self.speed = GhostBase.direction_speed[direction]
