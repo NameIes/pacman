@@ -26,10 +26,12 @@ class Pacman:
         # TODO: Анимация
         # циклический кадр, 0 - шар, 1 - 5градусовы 2-10градусов
         # 3-15 градусов от направлющего вектора
-        self.animation_cadr = 15
-        self.animation_freq = 120
+        self.mouth_angle = 15
+        self.animation = True  # Открывающийся рот True , закрывающийся False
+        self.anim_cadr = 0
+        self.anim_limit = 6
         self.speed = 2
-        self.radius = 30
+        self.radius = 14
 
     def reaction(self, event):
         pressed = pygame.key.get_pressed()
@@ -56,31 +58,47 @@ class Pacman:
             else:
                 self.x += self.speed
 
+            self.anim_cadr += 1
+            if self.anim_cadr == self.anim_limit:
+                self.anim_cadr = 0
+                if self.mouth_angle == 15 and not self.animation:
+                    self.animation = True
+                elif self.mouth_angle == 75 and self.animation:
+                    self.animation = False
+
+                if self.animation:
+                    self.mouth_angle += 15
+                else:
+                    self.mouth_angle -= 15
+
     def draw(self, screen):
-        # TODO: Рисовать круг пока игра не стартанула
-        p = [(self.x, self.y)]
-        # Get points on arc
-        start_angle, stop_angle = self.start_angles[self.direction]
-
-        start_angle += self.animation_cadr
-        stop_angle -= self.animation_cadr
-        # print("{} {}".format(start_angle, stop_angle))
-
-        p = [(self.x, self.y)]
-
-        if start_angle < stop_angle:
-            rang = list(range(start_angle, stop_angle))
+        if not self.start:
+            pygame.draw.circle(screen, yellow, (self.x, self.y), self.radius)
         else:
-            rang = list(range(start_angle, 360)) + list(range(1, stop_angle))
+            p = [(self.x, self.y)]
+            # Get points on arc
+            start_angle, stop_angle = self.start_angles[self.direction]
 
-        for n in rang:
-            x1 = self.x + int(self.radius * math.cos(n * math.pi / 180))
-            y1 = self.y + int(self.radius * math.sin(n * math.pi / 180))
-            p.append((x1, y1))
-        p.append((self.x, self.y))
-        pygame.gfxdraw.filled_polygon(screen, p, yellow)
-        # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
-        #                    yellow)
+            start_angle += self.mouth_angle
+            stop_angle -= self.mouth_angle
+            # print("{} {}".format(start_angle, stop_angle))
+
+            p = [(self.x, self.y)]
+
+            if start_angle < stop_angle:
+                rang = list(range(start_angle, stop_angle))
+            else:
+                rang = list(range(start_angle, 360)) + list(
+                    range(1, stop_angle))
+
+            for n in rang:
+                x1 = self.x + int(self.radius * math.cos(n * math.pi / 180))
+                y1 = self.y + int(self.radius * math.sin(n * math.pi / 180))
+                p.append((x1, y1))
+            p.append((self.x, self.y))
+            pygame.gfxdraw.filled_polygon(screen, p, yellow)
+            # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
+            #                    yellow)
 
 
 def main():
