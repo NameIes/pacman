@@ -1,5 +1,6 @@
 import pygame
-
+#TODO: Переименовать класс покороче
+#TODO: Переместить файл в папку, где у нас обычно лежат классы
 class Grain:
 
 	def __init__(self, center_x, center_y, radius = 2, color = (255, 255, 0)):
