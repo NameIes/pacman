@@ -8,7 +8,7 @@ size = width, height = 800, 600
 black = 0, 0, 0
 yellow = 255, 255, 0
 FPS = 60
-
+# TODO: Переместить файл в папочку с классами, избавиться от демки
 
 class Pacman:
     start_angles = {
