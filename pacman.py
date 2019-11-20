@@ -27,9 +27,9 @@ class Pacman:
         # циклический кадр, 0 - шар, 1 - 5градусовы 2-10градусов
         # 3-15 градусов от направлющего вектора
         self.animation_cadr = 15
-        self.animation_freq = 120
+        self.animation = True   # Открывающийся рот True , закрывающийся False
         self.speed = 2
-        self.radius = 30
+        self.radius = 14
 
     def reaction(self, event):
         pressed = pygame.key.get_pressed()
@@ -55,6 +55,16 @@ class Pacman:
                 self.y += self.speed
             else:
                 self.x += self.speed
+
+        if self.animation_cadr == 15 and not self.animation:
+            self.animation = True
+        elif self.animation_cadr == 75 and self.animation:
+            self.animation = False
+
+        if self.animation:
+            self.animation_cadr += 15
+        else:
+            self.animation_cadr -= 15
 
     def draw(self, screen):
         # TODO: Рисовать круг пока игра не стартанула
