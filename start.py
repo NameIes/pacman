@@ -13,6 +13,7 @@ def main():
     screen = pygame.display.set_mode(size)
 
     # Пример
+    # TODO: подставлять координаты спавна приведений из нашего уровня
     lst = [
         Blinky(10, 10, direction='right'),
         Pinky(750, 10, direction='down'),

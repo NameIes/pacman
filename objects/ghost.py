@@ -21,10 +21,14 @@ class GhostBase:
         self.is_death = False
         self.speed = GhostBase.direction_speed[direction]
 
+    #TODO: Реализовать общую функцию движения при напуганности
+
+
     def process_logic(self):
+        #TODO: Реализовать алгоритм движения по корридорам ()
         self.rect.x += self.speed[0]
         self.rect.y += self.speed[1]
-
+        # TODO: выделить дальнейший код в отдельную функцию, вызывать ее при process logic у потомков
         if not self.scared or self.is_death:  # Анимация
             self.timer += 1
             if self.timer == self.anim_speed:
