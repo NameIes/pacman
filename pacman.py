@@ -26,10 +26,15 @@ class Pacman:
         # TODO: Анимация
         # циклический кадр, 0 - шар, 1 - 5градусовы 2-10градусов
         # 3-15 градусов от направлющего вектора
+<<<<<<< HEAD
         self.mouth_angle = 15
         self.animation = True  # Открывающийся рот True , закрывающийся False
         self.anim_cadr = 0
         self.anim_limit = 6
+=======
+        self.animation_cadr = 15
+        self.animation = True   # Открывающийся рот True , закрывающийся False
+>>>>>>> feda2d4e9e8da660376d35d8fa26055fdc51b07d
         self.speed = 2
         self.radius = 14
 
@@ -58,6 +63,7 @@ class Pacman:
             else:
                 self.x += self.speed
 
+<<<<<<< HEAD
             self.anim_cadr += 1
             if self.anim_cadr == self.anim_limit:
                 self.anim_cadr = 0
@@ -70,6 +76,17 @@ class Pacman:
                     self.mouth_angle += 15
                 else:
                     self.mouth_angle -= 15
+=======
+        if self.animation_cadr == 15 and not self.animation:
+            self.animation = True
+        elif self.animation_cadr == 75 and self.animation:
+            self.animation = False
+
+        if self.animation:
+            self.animation_cadr += 15
+        else:
+            self.animation_cadr -= 15
+>>>>>>> feda2d4e9e8da660376d35d8fa26055fdc51b07d
 
     def draw(self, screen):
         if not self.start:
