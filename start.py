@@ -1,5 +1,5 @@
 import sys
-from grain_energizer_classes import *
+from grain import *
 import pygame
 
 
