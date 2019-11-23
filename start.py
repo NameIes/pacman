@@ -3,6 +3,7 @@
 import sys
 from objects.ghosts import *
 from objects.field import FIELD_SIZE, pole_xy, show_field
+from objects.pacman import *
 
 
 def main():
@@ -11,6 +12,10 @@ def main():
 
     pygame.init()
     screen = pygame.display.set_mode(size)
+    pacman = Pacman(60, 60)
+
+    clock = pygame.time.Clock()
+    counter_pacman = 0
 
     # Пример
     # TODO: подставлять координаты спавна приведений из нашего уровня
@@ -28,9 +33,13 @@ def main():
 
     game_over = False
     while not game_over:
+        clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
+            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+                pacman.reaction(event)
+        pacman.action()
 
         screen.fill(black)
 
@@ -39,6 +48,12 @@ def main():
         for i in lst:
             i.process_logic()
             i.process_draw(screen)
+
+        pacman.draw(screen)
+        counter_pacman += 1
+
+        if counter_pacman > 100:
+            pacman.start = True
 
         pygame.display.flip()
         pygame.time.wait(10)

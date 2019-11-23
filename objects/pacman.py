@@ -4,8 +4,6 @@ import pygame
 import sys
 import math
 import pygame.gfxdraw
-size = width, height = 800, 600
-black = 0, 0, 0
 yellow = 255, 255, 0
 FPS = 60
 # TODO: Переместить файл в папочку с классами, избавиться от демки
@@ -99,38 +97,3 @@ class Pacman:
             pygame.gfxdraw.filled_polygon(screen, p, yellow)
             # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
             #                    yellow)
-
-
-def main():
-    main_screen = pygame.display.set_mode(size)
-    game_quit = False
-
-    pygame.init()
-
-    P = Pacman(60, 60)
-
-    clock = pygame.time.Clock()
-    counter = 0
-
-    while not game_quit:
-        clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_quit = True
-            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
-                P.reaction(event)
-
-        P.action()
-
-        main_screen.fill(black)
-        P.draw(main_screen)
-        counter += 1
-        if (counter > 100):
-            P.start = True
-        pygame.display.flip()
-
-    sys.exit()
-
-
-if __name__ == '__main__':
-    main()
