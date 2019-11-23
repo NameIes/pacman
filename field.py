@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 import pygame, sys
+from draw_walls import fig_6,rect_1
 
-z = int(14)
+
+z = int(28)
 # z равна половине ширины коридора между стенами
 # Размер Pacman и привидений = 2 * z
 # size = width, height = определяется как размер загруженного поля
@@ -92,6 +95,19 @@ def field():
                 gameover = True
         screen.fill(black)
         show_field(screen, pole_xy, (0, 0, 127))
+        #fig_6(screen, 20, 130, 300, 200, 50, 5, 1)
+        rect_1(screen, 2*z+z//2, 5*z+z//2, 3*z, 2*z ,3, 3 )
+        rect_1(screen, 7*z+z//2, 5*z+z//2, 4*z, 2*z ,3, 3 )
+        rect_1(screen, 16*z+z//2, 5*z+z//2, 4*z, 2*z ,3, 3 )
+        rect_1(screen, 22*z+z//2, 5*z+z//2, 3*z, 2*z ,3, 3 )
+        rect_1(screen, 2*z+z//2, 9*z+z//2, 3*z-2, 1*z-2 ,3, 3 )
+        rect_1(screen, 22*z+z//2, 9*z+z//2, 3*z-2, 1*z-2 ,3, 3 )
+        rect_1(screen, 7*z+z//2, 18*z+z//2, 1*z-2, 4*z-2 ,3, 3 )
+        rect_1(screen, 19*z+z//2, 18*z+z//2, 1*z-2, 4*z-2 ,3, 3 )
+        rect_1(screen, 7*z+z//2, 24*z+z//2, 4*z-2, 1*z-2 ,3, 3 )
+        rect_1(screen, 16*z+z//2, 24*z+z//2, 4*z-2, 1*z-2 ,3, 3 )
+        #rect_1(screen, 2*z+z//2, 9*z+z//2, 3*z-5, 2*z-5 ,3, 5 )
+        #rect_1(screen, 2*z+z//2, 11*z+z//2, 3*z-20, 2*z-20 ,3, 10 )
         pygame.display.flip()
         pygame.time.wait(10)
     sys.exit()
