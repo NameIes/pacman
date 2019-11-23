@@ -2,12 +2,12 @@
 
 import sys
 from objects.ghosts import *
-from objects.field import FIELD_SIZE, pole_xy, show_field
+from objects.field import SIZE, pole_xy, show_field
 from objects.pacman import *
 
 
 def main():
-    size = FIELD_SIZE
+    size = SIZE
     black = (0, 0, 0)
 
     pygame.init()
