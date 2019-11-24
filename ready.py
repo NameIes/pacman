@@ -7,7 +7,7 @@ class Text:
         self.data = data
         self.size = size
         self.color = color
-        self.font = pygame.font.SysFont('Comic Sans MS', self.size, True)
+        self.font = pygame.font.Font('crackman.ttf', self.size)
         self.surface = self.font.render(self.data, True, self.color)
 
     def update_position(self, x, y):
@@ -44,6 +44,7 @@ def ready():
 
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)
+# TODO добавить вызов функции "основной игры"
 
         pygame.display.flip()
         pygame.time.wait(10)
