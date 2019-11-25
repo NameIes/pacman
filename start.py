@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-
 import sys
-from objects.ghosts import *
+import pygame
+from objects.ghosts import Blinky, Inky, Clyde, Pinky
 from objects.field import SIZE, pole_xy, show_field
-from objects.pacman import *
+from objects.pacman import Pacman
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     screen = pygame.display.set_mode(size)
     pacman = Pacman(60, 60)
 
-    clock = pygame.time.Clock()
+    # clock = pygame.time.Clock()
     counter_pacman = 0
 
     # Пример
@@ -33,7 +33,7 @@ def main():
 
     game_over = False
     while not game_over:
-        clock.tick(FPS)
+        # clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True

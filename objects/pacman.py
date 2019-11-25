@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import pygame
-import sys
 import math
 import pygame.gfxdraw
 yellow = 255, 255, 0
 FPS = 60
-# TODO: Переместить файл в папочку с классами, избавиться от демки
+
 
 class Pacman:
     start_angles = {
@@ -21,7 +20,6 @@ class Pacman:
         self.y = y
         self.direction = 'd'  # 'w', 'a', 's', 'd'
         self.start = False
-        # TODO: Анимация
         # циклический кадр, 0 - шар, 1 - 5градусовы 2-10градусов
         # 3-15 градусов от направлющего вектора
         self.mouth_angle = 15
@@ -95,5 +93,3 @@ class Pacman:
                 p.append((x1, y1))
             p.append((self.x, self.y))
             pygame.gfxdraw.filled_polygon(screen, p, yellow)
-            # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
-            #                    yellow)
