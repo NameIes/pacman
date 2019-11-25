@@ -157,7 +157,7 @@ def field():
                 gameover = True
         screen.fill(black)
         show_field(screen, z)
-        show_ways(screen, pole_xy, (0, 0, 127))
+        #show_ways(screen, pole_xy, (0, 0, 127))
         pygame.display.flip()
         pygame.time.wait(10)
     sys.exit()
