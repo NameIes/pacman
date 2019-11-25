@@ -4,14 +4,11 @@ import pygame
 from objects.ghosts import Blinky, Inky, Clyde, Pinky
 from objects.field import SIZE, pole_xy, show_field
 from objects.pacman import Pacman
+from menu import main_menu
 
 
-def main():
-    size = SIZE
+def game(screen):
     black = (0, 0, 0)
-
-    pygame.init()
-    screen = pygame.display.set_mode(size)
     pacman = Pacman(60, 60)
 
     # clock = pygame.time.Clock()
@@ -59,6 +56,15 @@ def main():
         pygame.time.wait(10)
 
     sys.exit(0)
+
+
+def main():
+    size = SIZE
+
+    pygame.init()
+    screen = pygame.display.set_mode(size)
+    main_menu(screen, game)
+    # game(screen)
 
 
 if __name__ == '__main__':
