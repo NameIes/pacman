@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pygame, sys
 
 z = int(14)
@@ -73,9 +74,47 @@ SIZE = width, height = z * len(pole_xy[0]), z * len(pole_xy)
 def show_field(screen, field=pole_xy, color_f=(0, 0, 255)):
     for yy in range((len(pole_xy))):
         for xx in range(len(pole_xy[yy])):
-            if int(pole_xy[yy][xx]) == 0:
+            if int(pole_xy[yy][xx]) == 1:
                 pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
-            elif int(pole_xy[yy][xx]) == 3:
-                pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
+            # elif int(pole_xy[yy][xx]) == 3:
+            #     pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
             else:
                 pass
+
+
+def get_pos_in_field(x,y):
+    """
+    Функция возвращает кортеж избавиться индексов 
+    клетки в которой находиться точка(зависит отображение z)
+
+    get_pos_in_field(47,15) -> (3,2)
+
+    """
+    xx, yy = 0,0    
+    if x % z != 0:
+        xx = x // z              # индекс с 0
+    else:
+        xx = x // z - 1
+    if y % z != 0:
+        yy = y // z              # индекс с 0
+    else:
+        yy = y // z - 1
+    return xx,yy
+
+    
+
+def is_cell_centre(x,y):
+    """
+    Логическая функция возвращает True если точка находиться 
+    в центре пиксельной клетки(зависит от z)
+
+    is_cell_centre(7,8) -> True
+    """
+    flag = False
+    if z % 2 == 0:
+        if((x%z - z/2) <= 1) and ((y%z - z/2) <= 1):
+            flag = True
+    else:
+        if(x%z == (z//2+1)) and (y%z == (z//2+1)):
+            flag = True
+    return flag
