@@ -4,6 +4,8 @@ import pygame
 import sys
 import math
 import pygame.gfxdraw
+from objects.field import pole_xy
+from objects.field import z
 yellow = 255, 255, 0
 FPS = 60
 # TODO: Переместить файл в папочку с классами, избавиться от демки
@@ -28,8 +30,18 @@ class Pacman:
         self.animation = True  # Открывающийся рот True , закрывающийся False
         self.anim_cadr = 0
         self.anim_limit = 6
-        self.speed = 2
+        self.speed = 1
         self.radius = 14
+
+    def can_move_in(self, direction):
+        if direction == 'd':
+            return pole_xy[self.y//z][(self.x + self.radius)//z] != 1
+        elif direction == 'a':
+            return pole_xy[self.y // z][(self.x - self.radius) // z] != 1
+        elif direction == 'w':
+            return pole_xy[(self.y - self.radius) // z][self.x // z] != 1
+        elif direction == 's':
+            return pole_xy[(self.y + self.radius) // z][self.x // z] != 1
 
     def reaction(self, event):
         pressed = pygame.key.get_pressed()
@@ -50,13 +62,15 @@ class Pacman:
             if self.direction == 'w':
                 self.y -= self.speed
             elif self.direction == 'a':
-                self.x -= self.speed
+                if self.can_move_in('a'):
+                    self.x -= self.speed
             elif self.direction == 's':
                 self.y += self.speed
             else:
-                self.x += self.speed
+                if self.can_move_in('d'):
+                    self.x += self.speed
 
-            self.anim_cadr += 1
+            self.anim_cadr += 1 # Заменять на 0 если стоит
             if self.anim_cadr == self.anim_limit:
                 self.anim_cadr = 0
                 if self.mouth_angle == 15 and not self.animation:

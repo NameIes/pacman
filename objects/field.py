@@ -1,4 +1,5 @@
-import pygame, sys
+import pygame
+import sys
 
 z = int(14)
 # z равна половине ширины коридора между стенами
@@ -67,15 +68,35 @@ pole_xy = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
            ]
 
-SIZE = width, height = z * len(pole_xy[0]), z * len(pole_xy)
+size = width, height = z * len(pole_xy[0]), z * len(pole_xy)
 
 
 def show_field(screen, field=pole_xy, color_f=(0, 0, 255)):
     for yy in range((len(pole_xy))):
         for xx in range(len(pole_xy[yy])):
-            if int(pole_xy[yy][xx]) == 0:
+            if int(pole_xy[yy][xx]) == 1:
                 pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
-            elif int(pole_xy[yy][xx]) == 3:
-                pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
+            # elif int(pole_xy[yy][xx]) == 3:
+            #     pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
             else:
                 pass
+
+
+def field():
+    pygame.init()
+    screen = pygame.display.set_mode(size)
+    gameover = False
+
+    while not gameover:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameover = True
+        screen.fill(black)
+        show_field(screen, pole_xy, (0, 0, 127))
+        pygame.display.flip()
+        pygame.time.wait(10)
+    sys.exit()
+
+
+if __name__ == '__main__':
+    field()

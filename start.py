@@ -2,17 +2,16 @@
 
 import sys
 from objects.ghosts import *
-from objects.field import SIZE, pole_xy, show_field
+from objects.field import size, pole_xy, show_field
 from objects.pacman import *
 
 
 def main():
-    size = SIZE
     black = (0, 0, 0)
 
     pygame.init()
     screen = pygame.display.set_mode(size)
-    pacman = Pacman(60, 60)
+    pacman = Pacman(196, 371)
 
     clock = pygame.time.Clock()
     counter_pacman = 0
@@ -39,6 +38,8 @@ def main():
                 game_over = True
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(pygame.mouse.get_pos())
         pacman.action()
 
         screen.fill(black)
