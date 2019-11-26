@@ -4,9 +4,9 @@ import pygame
 import sys
 import math
 import pygame.gfxdraw
+from objects.field import pole_xy, z, is_cell_centre, get_pos_in_field
 yellow = 255, 255, 0
-FPS = 60
-# TODO: Переместить файл в папочку с классами, избавиться от демки
+# FPS = 60
 
 class Pacman:
     start_angles = {
@@ -28,19 +28,106 @@ class Pacman:
         self.animation = True  # Открывающийся рот True , закрывающийся False
         self.anim_cadr = 0
         self.anim_limit = 6
-        self.speed = 2
-        self.radius = 14
+        self.speed = 1
+        self.radius = z
+        self.standing = 0
+        self.rotate_memory_dir =self.direction  # Запоминание направления
+
+    def can_move_in(self, direction):
+        xx,yy = get_pos_in_field(self.x,self.y)
+        flag_center = is_cell_centre(self.x,self.y)
+        res_flag = False
+        # print("{} {} {}".format(xx,yy,("YES" if flag_center else "NO")))
+        if direction == 'd':
+            if  pole_xy[yy][xx+1] != 1:
+                res_flag = True
+            else:
+                if flag_center:  # Если впереди стенами но мы не достигли центра клетки
+                    res_flag = False
+                else:
+                    res_flag = True
+        elif direction == 'a':
+            if  pole_xy[yy][xx-1] != 1:
+                res_flag = True
+            else:
+                if flag_center:  # Если впереди стенами но мы не достигли центра клетки
+                    res_flag = False
+                else:
+                    res_flag = True
+        elif direction == 'w':
+            if  pole_xy[yy-1][xx] != 1:
+                res_flag = True
+            else:
+                if flag_center:  # Если впереди стенами но мы не достигли центра клетки
+                    res_flag = False
+                else:
+                    res_flag = True
+        elif direction == 's':
+            if  pole_xy[yy+1][xx] != 1:
+                res_flag = True
+            else:
+                if flag_center:  # Если впереди стенами но мы не достигли центра клетки
+                    res_flag = False
+                else:
+                    res_flag = True
+            
+        return res_flag
+
+    def can_rotate(self, direction):
+        xx,yy = get_pos_in_field(self.x,self.y)
+        flag_center = is_cell_centre(self.x,self.y)
+        res_flag = False
+        
+        if pole_xy[yy][xx] == 3:
+            if flag_center:
+                self.direction = self.rotate_memory_dir
+                res_flag = self.can_move_in(direction)
+            else:
+                self.rotate_memory_dir = direction
+                res_flag = False
+                
+        else:
+            if self.direction == 'd' or self.direction == 'a':
+                if direction == 'd' or direction == 'a':
+                    res_flag = self.can_move_in(direction)
+                else:
+                    res_flag = False
+            else:
+                if direction == 'w' or direction == 's':
+                    res_flag = self.can_move_in(direction)
+                else:
+                    res_flag = False
+                    
+            self.rotate_memory_dir = self.direction
+            
+        return res_flag
+                
 
     def reaction(self, event):
         pressed = pygame.key.get_pressed()
+        # print("a - {} -rot {} -can_move_in ".format(
+        #     ("YES" if self.can_move_in('a') else "NO"),
+        #     ("YES" if self.can_rotate('a') else "NO")))
+        # print("d - {} -rot {} -can_move_in ".format(
+        #     ("YES" if self.can_move_in('d') else "NO"),
+        #     ("YES" if self.can_rotate('d') else "NO")))
+        # print("w - {} -rot {} -can_move_in ".format(
+        #     ("YES" if self.can_move_in('w') else "NO"),
+        #     ("YES" if self.can_rotate('w') else "NO")))
+        # print("s - {} -rot {} -can_move_in ".format(
+        #     ("YES" if self.can_move_in('s') else "NO"),
+        #     ("YES" if self.can_rotate('s') else "NO")))
+        # xx,yy = get_pos_in_field(self.x,self.y)
+        # print(pole_xy[yy][xx])
+
         if event.type == pygame.KEYDOWN:
-            if pressed[pygame.K_a]:
+            if pressed[pygame.K_a] and self.can_rotate('a'):
                 self.direction = 'a'
-            if pressed[pygame.K_d]:
+            if pressed[pygame.K_d] and self.can_rotate('d'):
                 self.direction = 'd'
-            if pressed[pygame.K_w]:
+            if pressed[pygame.K_w] and self.can_rotate('w'):
                 self.direction = 'w'
-            if pressed[pygame.K_s]:
+            if pressed[pygame.K_s] and self.can_rotate('s'):
                 self.direction = 's'
         if event.type == pygame.KEYUP:
             pass
@@ -48,15 +135,31 @@ class Pacman:
     def action(self, ):
         if self.start:
             if self.direction == 'w':
-                self.y -= self.speed
+                if self.can_move_in('w'):
+                    self.y -= self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
             elif self.direction == 'a':
-                self.x -= self.speed
+                if self.can_move_in('a'):
+                    self.x -= self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
             elif self.direction == 's':
-                self.y += self.speed
+                if self.can_move_in('s'):
+                    self.y += self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
             else:
-                self.x += self.speed
+                if self.can_move_in('d'):
+                    self.x += self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
 
-            self.anim_cadr += 1
+            self.anim_cadr += self.standing
             if self.anim_cadr == self.anim_limit:
                 self.anim_cadr = 0
                 if self.mouth_angle == 15 and not self.animation:
@@ -69,6 +172,11 @@ class Pacman:
                 else:
                     self.mouth_angle -= 15
 
+    def stop_anim(self):
+        self.mouth_angle = 15
+        self.anim_cadr = 0
+        self.standing = 1
+
     def draw(self, screen):
         if not self.start:
             pygame.draw.circle(screen, yellow, (self.x, self.y), self.radius)
@@ -79,8 +187,6 @@ class Pacman:
 
             start_angle += self.mouth_angle
             stop_angle -= self.mouth_angle
-            # print("{} {}".format(start_angle, stop_angle))
-
             p = [(self.x, self.y)]
 
             if start_angle < stop_angle:
@@ -95,5 +201,3 @@ class Pacman:
                 p.append((x1, y1))
             p.append((self.x, self.y))
             pygame.gfxdraw.filled_polygon(screen, p, yellow)
-            # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
-            #                    yellow)

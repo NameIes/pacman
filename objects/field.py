@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-import pygame, sys
+import pygame
+import sys
+
+from objects.draw_walls import rect_1
 
 z = int(14)
 # z равна половине ширины коридора между стенами
@@ -68,26 +71,59 @@ pole_xy = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
            ]
 
-SIZE = width, height = z * len(pole_xy[0]), z * len(pole_xy)
+size = width, height = z * len(pole_xy[0]), z * len(pole_xy)
 
 
 def show_field(screen, field=pole_xy, color_f=(0, 0, 255)):
+    """
+    Функция отрисовки поля
+    """
     for yy in range((len(pole_xy))):
         for xx in range(len(pole_xy[yy])):
-            if int(pole_xy[yy][xx]) == 1:
+            if int(pole_xy[yy][xx]) == 0:
                 pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
-            # elif int(pole_xy[yy][xx]) == 3:
-            #     pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
+            elif int(pole_xy[yy][xx]) == 3:
+                pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
             else:
                 pass
+    rect_1(screen, 2 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, 3, 3)
+    rect_1(screen, 7 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, 3, 3)
+    rect_1(screen, 16 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, 3, 3)
+    rect_1(screen, 22 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, 3, 3)
+    rect_1(screen, 2 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, 3, 3)
+    rect_1(screen, 22 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, 3, 3)
+    rect_1(screen, 7 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, 3, 3)
+    rect_1(screen, 19 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, 3, 3)
+    rect_1(screen, 7 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, 3, 3)
+    rect_1(screen, 16 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, 3, 3)
+
+
+def field():
+    """
+    демо отрисовка поля
+    """
+    pygame.init()
+    screen = pygame.display.set_mode(size)
+    gameover = False
+
+    while not gameover:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameover = True
+        screen.fill(black)
+        show_field(screen, pole_xy, (0, 0, 127))
+        #fig_6(screen, 20, 130, 300, 200, 50, 5, 1)
+        #rect_1(screen, 2*z+z//2, 9*z+z//2, 3*z-5, 2*z-5 ,3, 5 )
+        #rect_1(screen, 2*z+z//2, 11*z+z//2, 3*z-20, 2*z-20 ,3, 10 )
+        pygame.display.flip()
+        pygame.time.wait(10)
+    sys.exit()
 
 
 def get_pos_in_field(x,y):
     """
     Функция возвращает кортеж избавиться индексов 
     клетки в которой находиться точка(зависит отображение z)
-
-    get_pos_in_field(47,15) -> (3,2)
 
     """
     xx, yy = 0,0    
@@ -101,7 +137,6 @@ def get_pos_in_field(x,y):
         yy = y // z - 1
     return xx,yy
 
-    
 
 def is_cell_centre(x,y):
     """
@@ -112,9 +147,13 @@ def is_cell_centre(x,y):
     """
     flag = False
     if z % 2 == 0:
-        if((x%z - z/2) <= 1) and ((y%z - z/2) <= 1):
+        if(abs(x%z - z/2) <= 1) and (abs(y%z - z/2) <= 1):
             flag = True
     else:
         if(x%z == (z//2+1)) and (y%z == (z//2+1)):
             flag = True
     return flag
+
+
+if __name__ == '__main__':
+    field()

@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from objects.ghosts import *
-from objects.field import SIZE, pole_xy, show_field
-from objects.pacman import *
+import pygame
+from objects.ghosts import Blinky, Pinky, Inky, Clyde
+from objects.field import size, pole_xy, show_field, z
+from objects.pacman import Pacman
 
 
 def main():
-    size = SIZE
     black = (0, 0, 0)
 
     pygame.init()
     screen = pygame.display.set_mode(size)
-    pacman = Pacman(60, 60)
+    pacman = Pacman(14*z, 26*z + z//2)
 
-    clock = pygame.time.Clock()
+    # clock = pygame.time.Clock()
+    # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
-    # Пример
     # TODO: подставлять координаты спавна приведений из нашего уровня
     lst = [
         Blinky(10, 10, direction='right'),
@@ -33,12 +33,14 @@ def main():
 
     game_over = False
     while not game_over:
-        clock.tick(FPS)
+        # clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(pygame.mouse.get_pos())
         pacman.action()
 
         screen.fill(black)
