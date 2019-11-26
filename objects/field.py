@@ -80,17 +80,17 @@ def show_walls(screen, z=int(14), color=(0, 0, 255), color_2=(155, 0, 0), d=int(
     rect_1(screen, color, 7 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, r, d)
     rect_1(screen, color, 16 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, r, d)
     rect_1(screen, color, 22 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, r, d)
-    rect_1(screen, color, 2 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, r, d)
+    rect_1(screen, color, 2 * z + z // 2, 9 * z + z // 2, 3 * z, 1 * z, r, d)
     #
     fig_1(screen, color, 10 * z + z // 2, 9 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
     fig_1(screen, color, 10 * z + z // 2, 21 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
     fig_1(screen, color, 10 * z + z // 2, 27 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
     #
-    rect_1(screen, color, 22 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, r, d)
-    rect_1(screen, color, 7 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, r, d)
-    rect_1(screen, color, 19 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, r, d)
-    rect_1(screen, color, 7 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, r, d)
-    rect_1(screen, color, 16 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, r, d)
+    rect_1(screen, color, 22 * z + z // 2, 9 * z + z // 2, 3 * z, 1 * z, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 18 * z + z // 2, 1 * z, 4 * z, r, d)
+    rect_1(screen, color, 19 * z + z // 2, 18 * z + z // 2, 1 * z, 4 * z, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 24 * z + z // 2, 4 * z, 1 * z , r, d)
+    rect_1(screen, color, 16 * z + z // 2, 24 * z + z // 2, 4 * z, 1 * z, r, d)
     #
     fig_2_2(screen, color, 2 * z + z // 2, 27 * z + z // 2, 9 * z, 5 * z + z // 2, 4 * z, 1 * z, r, d)
     fig_2_2(screen, color, 16 * z + z // 2, 27 * z + z // 2, 9 * z, 3 * z + z // 2, 4 * z, 1 * z, r, d)
