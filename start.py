@@ -3,7 +3,7 @@
 import sys
 import pygame
 from objects.ghosts import Blinky, Pinky, Inky, Clyde
-from objects.field import size, pole_xy, show_field, z
+from objects.field import size, show_field, z
 from objects.pacman import Pacman
 
 
@@ -44,8 +44,8 @@ def main():
         pacman.action()
 
         screen.fill(black)
+        show_field(screen, z)
 
-        show_field(screen, pole_xy, (0, 0, 127))
         # Пример
         for i in lst:
             i.process_logic()

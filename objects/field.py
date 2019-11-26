@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import pygame
 import sys
+from .draw_walls import rect_1, fig_1, fig_2, fig_2_2, fig_3, fig_4, fig_5, fig_6, angle_1, angle_2, angle_3, angle_4, \
+     angle_5, angle_6, angle_7
 
-from objects.draw_walls import rect_1
 
 z = int(14)
 # z равна половине ширины коридора между стенами
@@ -74,10 +75,66 @@ pole_xy = [[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
 size = width, height = z * len(pole_xy[0]), z * len(pole_xy)
 
 
-def show_field(screen, field=pole_xy, color_f=(0, 0, 255)):
-    """
-    Функция отрисовки поля
-    """
+def show_walls(screen, z=int(14), color=(0, 0, 255), color_2=(155, 0, 0), d=int(3), r=int(3)):
+    rect_1(screen, color, 2 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, r, d)
+    rect_1(screen, color, 16 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, r, d)
+    rect_1(screen, color, 22 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, r, d)
+    rect_1(screen, color, 2 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, r, d)
+    #
+    fig_1(screen, color, 10 * z + z // 2, 9 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
+    fig_1(screen, color, 10 * z + z // 2, 21 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
+    fig_1(screen, color, 10 * z + z // 2, 27 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
+    #
+    rect_1(screen, color, 22 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, r, d)
+    rect_1(screen, color, 19 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, r, d)
+    rect_1(screen, color, 16 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, r, d)
+    #
+    fig_2_2(screen, color, 2 * z + z // 2, 27 * z + z // 2, 9 * z, 5 * z + z // 2, 4 * z, 1 * z, r, d)
+    fig_2_2(screen, color, 16 * z + z // 2, 27 * z + z // 2, 9 * z, 3 * z + z // 2, 4 * z, 1 * z, r, d)
+    fig_3(screen, color, 7 * z + z // 2, 9 * z + z // 2, 4 * z, 7 * z, 1 * z, r, d)
+    fig_4(screen, color, 16 * z + z // 2, 9 * z + z // 2, 4 * z, 7 * z, 1 * z, r, d)
+    fig_5(screen, color, 2 * z + z // 2, 24 * z + z // 2, 3 * z, 4 * z, 1 * z, r, d)
+    fig_6(screen, color, 22 * z + z // 2, 24 * z + z // 2, 3 * z, 4 * z, 1 * z, r, d)
+    #
+    angle_1(screen, color, 0, 3 * z, 13 * z, 8 * z, z // 3, r, d)
+    angle_3(screen, color, 0 * z, 11 * z, 4 * z, 2 * z, z // 3, r, d)
+    angle_2(screen, color, 4 * z - z // 3, 13 * z - z // 3, 2 * z - z // 3, 1 * z, z // 3, r, d)
+    angle_4(screen, color, 0 * z, 13 * z, 6 * z - z // 3 * 2, 3 * z + z // 3, z // 3, r, d)
+    angle_2(screen, color, 0 * z, 19 * z - z // 3, 5 * z + z // 3, 3 * z + z // 3, z // 3, r, d)
+    angle_4(screen, color, 2 * z, 22 * z, 3 * z + z // 3, z // 3, z // 3, r, d)
+    angle_1(screen, color, 0, 22 * z, 3 * z, 5 * z, z // 3, r, d)
+    angle_3(screen, color, 0 * z, 29 * z, 14 * z, 5 * z, z // 3, r, d)
+    #
+    angle_2(screen, color, 15 * z, 3 * z, 13 * z, 8 * z, z // 3, r, d)
+    angle_4(screen, color, 24 * z, 10 * z, 4 * z, 3 * z, z // 3, r, d)
+    angle_1(screen, color, 23 * z - z // 3, 13 * z - z // 3, 2 * z, 1 * z, z // 3, r, d)
+    angle_3(screen, color, 23 * z - z // 3, 14 * z - z // 3, 5 * z + z // 3, 3 * z - z // 3, z // 3, r, d)
+    angle_1(screen, color, 23 * z - z // 3, 19 * z - z // 3, 5 * z + z // 3, 1 * z, z // 3, r, d)
+    angle_3(screen, color, 23 * z - z // 3, 20 * z - z // 3, 3 * z, 2 * z + z // 3 * 2, z // 3, r, d)
+    angle_2(screen, color, 26 * z - z // 3, 22 * z, 2 * z + z // 3, 5 * z + z // 3, z // 3, r, d)
+    angle_4(screen, color, 14 * z, 29 * z, 14 * z, 5 * z, z // 3, r, d)
+    #
+    angle_1(screen, color, 11 * z - z // 3, 16 * z - z // 3, 2 * z + z // 3, 2 * z, z // 3, r, d)
+    angle_2(screen, color, 15 * z, 16 * z - z // 3, 3 * z - z // 3 * 2, 2 * z, z // 3, r, d)
+    angle_3(screen, color, 11 * z - z // 3, 17 * z - z // 3, 4 * z, 3 * z - z // 3, z // 3, r, d)
+    angle_4(screen, color, 15 * z - z // 3, 18 * z - z // 3, 3 * z - z // 3, 2 * z - z // 3, z // 3, r, d)
+    pygame.draw.line(screen, (155, 0, 0), [13 * z, 16 * z - z // 3], [15 * z, 16 * z - z // 3], d)
+    pygame.draw.line(screen, color, [13 * z, 16 * z - z // 3], [13 * z, 16 * z], d)
+    pygame.draw.line(screen, color, [15 * z, 16 * z - z // 3], [15 * z, 16 * z], d)
+    pygame.draw.line(screen, color_2, [13 * z, 16 * z - z // 3], [15 * z, 16 * z - z // 3], d)
+    #
+    angle_5(screen, color, 25 * z + z // 3 + z % 3, 25 * z + z // 2, 3 * z - z * 2 // 3 - z % 3, 5 * z, z, r, d)
+    pygame.draw.line(screen, color, [28 * z, 27 * z], [28 * z, 29 * z], d)
+    angle_6(screen, color, 0 * z + z // 3, 25 * z + z // 2, 3 * z - z * 2 // 3, 5 * z, z, r, d)
+    pygame.draw.line(screen, color, [0 * z, 27 * z], [0 * z, 29 * z], d)
+    angle_7(screen, color, 12 * z - z // 3 + 4, 3 * z + z // 3, 5 * z - z * 2 // 3 - 2, 4 * z + z // 3 - 2, z, r, d)
+    pygame.draw.line(screen, color, [5 * z, 3 * z], [15 * z, 3 * z], d)
+
+
+def show_ways(screen, field=pole_xy, color_f=(0, 0, 255)):
     for yy in range((len(pole_xy))):
         for xx in range(len(pole_xy[yy])):
             if int(pole_xy[yy][xx]) == 0:
@@ -86,16 +143,10 @@ def show_field(screen, field=pole_xy, color_f=(0, 0, 255)):
                 pygame.draw.rect(screen, color_f, (z * xx, z * yy, z, z), 0)
             else:
                 pass
-    rect_1(screen, 2 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, 3, 3)
-    rect_1(screen, 7 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, 3, 3)
-    rect_1(screen, 16 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, 3, 3)
-    rect_1(screen, 22 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, 3, 3)
-    rect_1(screen, 2 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, 3, 3)
-    rect_1(screen, 22 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, 3, 3)
-    rect_1(screen, 7 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, 3, 3)
-    rect_1(screen, 19 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, 3, 3)
-    rect_1(screen, 7 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, 3, 3)
-    rect_1(screen, 16 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, 3, 3)
+
+
+def show_field(screen, z=int(14), color=(0, 0, 255), color_2=(155, 0, 0), d=int(3), r=int(3)):
+    show_walls(screen, z, color, color_2, d, r)
 
 
 def field():
@@ -111,16 +162,14 @@ def field():
             if event.type == pygame.QUIT:
                 gameover = True
         screen.fill(black)
-        show_field(screen, pole_xy, (0, 0, 127))
-        #fig_6(screen, 20, 130, 300, 200, 50, 5, 1)
-        #rect_1(screen, 2*z+z//2, 9*z+z//2, 3*z-5, 2*z-5 ,3, 5 )
-        #rect_1(screen, 2*z+z//2, 11*z+z//2, 3*z-20, 2*z-20 ,3, 10 )
+        show_field(screen, z)
+        # show_ways(screen, pole_xy, (0, 0, 127))
         pygame.display.flip()
         pygame.time.wait(10)
     sys.exit()
 
 
-def get_pos_in_field(x,y):
+def get_pos_in_field(x, y):
     """
     Функция возвращает кортеж избавиться индексов 
     клетки в которой находиться точка(зависит отображение z)
@@ -135,10 +184,10 @@ def get_pos_in_field(x,y):
         yy = y // z              # индекс с 0
     else:
         yy = y // z - 1
-    return xx,yy
+    return xx, yy
 
 
-def is_cell_centre(x,y):
+def is_cell_centre(x, y):
     """
     Логическая функция возвращает True если точка находиться 
     в центре пиксельной клетки(зависит от z)
