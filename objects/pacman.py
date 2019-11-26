@@ -118,7 +118,7 @@ class Pacman:
         # xx,yy = get_pos_in_field(self.x,self.y)
         # print(pole_xy[yy][xx])
 
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
             if pressed[pygame.K_a] and self.can_rotate('a'):
                 self.direction = 'a'
             if pressed[pygame.K_d] and self.can_rotate('d'):
@@ -127,8 +127,6 @@ class Pacman:
                 self.direction = 'w'
             if pressed[pygame.K_s] and self.can_rotate('s'):
                 self.direction = 's'
-        if event.type == pygame.KEYUP:
-            pass
 
     def action(self, ):
         if self.start:
