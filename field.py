@@ -3,7 +3,7 @@ import pygame, sys
 from draw_walls import rect_1, fig_1, fig_2, fig_2_2, fig_3, fig_4, fig_5, fig_6, angle_1, angle_2, angle_3, angle_4, \
     angle_5, angle_6, angle_7
 
-z = int(14)
+z = int(20)
 # z равна половине ширины коридора между стенами
 # Размер Pacman и привидений = 2 * z
 # size = width, height = определяется как размер загруженного поля
@@ -78,24 +78,26 @@ def show_walls(screen, z=int(14), color=(0, 0, 255), color_2=(155, 0, 0), d=int(
     rect_1(screen, color, 7 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, r, d)
     rect_1(screen, color, 16 * z + z // 2, 5 * z + z // 2, 4 * z, 2 * z, r, d)
     rect_1(screen, color, 22 * z + z // 2, 5 * z + z // 2, 3 * z, 2 * z, r, d)
-    rect_1(screen, color, 2 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, r, d)
     #
+    rect_1(screen, color, 2 * z + z // 2, 9 * z + z // 2, 3 * z, 1 * z , r, d)
+    fig_3(screen, color, 7 * z + z // 2, 9 * z + z // 2, 4 * z, 7 * z, 1 * z, r, d)
     fig_1(screen, color, 10 * z + z // 2, 9 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
-    fig_1(screen, color, 10 * z + z // 2, 21 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
-    fig_1(screen, color, 10 * z + z // 2, 27 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
+    fig_4(screen, color, 16 * z + z // 2, 9 * z + z // 2, 4 * z, 7 * z, 1 * z, r, d)
+    rect_1(screen, color, 22 * z + z // 2, 9 * z + z // 2, 3 * z, 1 * z, r, d)
     #
-    rect_1(screen, color, 22 * z + z // 2, 9 * z + z // 2, 3 * z - 2, 1 * z - 2, r, d)
-    rect_1(screen, color, 7 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, r, d)
-    rect_1(screen, color, 19 * z + z // 2, 18 * z + z // 2, 1 * z - 2, 4 * z - 2, r, d)
-    rect_1(screen, color, 7 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, r, d)
-    rect_1(screen, color, 16 * z + z // 2, 24 * z + z // 2, 4 * z - 2, 1 * z - 2, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 18 * z + z // 2, 1 * z, 4 * z, r, d)
+    rect_1(screen, color, 19 * z + z // 2, 18 * z + z // 2, 1 * z, 4 * z, r, d)
+    #
+    fig_1(screen, color, 10 * z + z // 2, 21 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
+    #
+    fig_5(screen, color, 2 * z + z // 2, 24 * z + z // 2, 3 * z, 4 * z, 1 * z, r, d)
+    rect_1(screen, color, 7 * z + z // 2, 24 * z + z // 2, 4 * z, 1 * z, r, d)
+    rect_1(screen, color, 16 * z + z // 2, 24 * z + z // 2, 4 * z, 1 * z, r, d)
+    fig_6(screen, color, 22 * z + z // 2, 24 * z + z // 2, 3 * z, 4 * z, 1 * z, r, d)
     #
     fig_2_2(screen, color, 2 * z + z // 2, 27 * z + z // 2, 9 * z, 5 * z + z // 2, 4 * z, 1 * z, r, d)
+    fig_1(screen, color, 10 * z + z // 2, 27 * z + z // 2, 7 * z, 4 * z, 1 * z, r, d)
     fig_2_2(screen, color, 16 * z + z // 2, 27 * z + z // 2, 9 * z, 3 * z + z // 2, 4 * z, 1 * z, r, d)
-    fig_3(screen, color, 7 * z + z // 2, 9 * z + z // 2, 4 * z, 7 * z, 1 * z, r, d)
-    fig_4(screen, color, 16 * z + z // 2, 9 * z + z // 2, 4 * z, 7 * z, 1 * z, r, d)
-    fig_5(screen, color, 2 * z + z // 2, 24 * z + z // 2, 3 * z, 4 * z, 1 * z, r, d)
-    fig_6(screen, color, 22 * z + z // 2, 24 * z + z // 2, 3 * z, 4 * z, 1 * z, r, d)
     #
     angle_1(screen, color, 0, 3 * z, 13 * z, 8 * z, z // 3, r, d)
     angle_3(screen, color, 0 * z, 11 * z, 4 * z, 2 * z, z // 3, r, d)
