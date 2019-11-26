@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import pygame
+import sys
 import math
 import pygame.gfxdraw
 from objects.field import pole_xy, z, is_cell_centre, get_pos_in_field
 yellow = 255, 255, 0
-# FPS = 60
-
 
 class Pacman:
     start_angles = {
@@ -186,6 +185,8 @@ class Pacman:
 
             start_angle += self.mouth_angle
             stop_angle -= self.mouth_angle
+            # print("{} {}".format(start_angle, stop_angle))
+
             p = [(self.x, self.y)]
 
             if start_angle < stop_angle:
@@ -200,3 +201,5 @@ class Pacman:
                 p.append((x1, y1))
             p.append((self.x, self.y))
             pygame.gfxdraw.filled_polygon(screen, p, yellow)
+            # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
+            #                    yellow)
