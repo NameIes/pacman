@@ -11,7 +11,7 @@ def main():
 
     pygame.init()
     screen = pygame.display.set_mode(size)
-    pacman = Pacman(196, 371)
+    pacman = Pacman(390, 742)
 
     clock = pygame.time.Clock()
     counter_pacman = 0

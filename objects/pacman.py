@@ -32,27 +32,43 @@ class Pacman:
         self.anim_limit = 6
         self.speed = 1
         self.radius = 14
+        self.standing = 0
 
     def can_move_in(self, direction):
         if direction == 'd':
             return pole_xy[self.y//z][(self.x + self.radius)//z] != 1
         elif direction == 'a':
-            return pole_xy[self.y // z][(self.x - self.radius) // z] != 1
+            return pole_xy[self.y // z][(self.x - 1 - self.radius) // z] != 1
         elif direction == 'w':
-            return pole_xy[(self.y - self.radius) // z][self.x // z] != 1
+            return pole_xy[(self.y - 1 - self.radius) // z][self.x // z] != 1
         elif direction == 's':
             return pole_xy[(self.y + self.radius) // z][self.x // z] != 1
+
+    def can_rotate(self, direction):
+        if self.direction == direction:
+            return False
+        print(self.x, self.y)
+        if self.direction == 'd' or self.direction == 'a':
+            if direction == 'd' or direction == 'a':
+                return True
+            else:
+                return (self.x+self.radius) % z == 0
+        else:
+            if direction == 'w' or direction == 's':
+                return True
+            else:
+                return (self.y+self.radius) % z == 0
 
     def reaction(self, event):
         pressed = pygame.key.get_pressed()
         if event.type == pygame.KEYDOWN:
-            if pressed[pygame.K_a]:
+            if pressed[pygame.K_a] and self.can_move_in('a') and self.can_rotate('a'):
                 self.direction = 'a'
-            if pressed[pygame.K_d]:
+            if pressed[pygame.K_d] and self.can_move_in('d') and self.can_rotate('d'):
                 self.direction = 'd'
-            if pressed[pygame.K_w]:
+            if pressed[pygame.K_w] and self.can_move_in('w') and self.can_rotate('w'):
                 self.direction = 'w'
-            if pressed[pygame.K_s]:
+            if pressed[pygame.K_s] and self.can_move_in('s') and self.can_rotate('s'):
                 self.direction = 's'
         if event.type == pygame.KEYUP:
             pass
@@ -60,17 +76,31 @@ class Pacman:
     def action(self, ):
         if self.start:
             if self.direction == 'w':
-                self.y -= self.speed
+                if self.can_move_in('w'):
+                    self.y -= self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
             elif self.direction == 'a':
                 if self.can_move_in('a'):
                     self.x -= self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
             elif self.direction == 's':
-                self.y += self.speed
+                if self.can_move_in('s'):
+                    self.y += self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
             else:
                 if self.can_move_in('d'):
                     self.x += self.speed
+                    self.standing = 1
+                else:
+                    self.stop_anim()
 
-            self.anim_cadr += 1 # Заменять на 0 если стоит
+            self.anim_cadr += self.standing
             if self.anim_cadr == self.anim_limit:
                 self.anim_cadr = 0
                 if self.mouth_angle == 15 and not self.animation:
@@ -82,6 +112,11 @@ class Pacman:
                     self.mouth_angle += 15
                 else:
                     self.mouth_angle -= 15
+
+    def stop_anim(self):
+        self.mouth_angle = 15
+        self.anim_cadr = 0
+        self.standing = 1
 
     def draw(self, screen):
         if not self.start:
