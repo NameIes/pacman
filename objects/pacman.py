@@ -201,3 +201,4 @@ class Pacman:
                 p.append((x1, y1))
             p.append((self.x, self.y))
             pygame.gfxdraw.filled_polygon(screen, p, yellow)
+

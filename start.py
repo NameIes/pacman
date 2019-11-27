@@ -2,18 +2,9 @@
 
 import sys
 import pygame
-from objects.ghosts import Blinky, Pinky, Inky, Clyde
+from objects.ghosts import *
 from objects.field import size, pole_xy, show_field, z
 from objects.pacman import Pacman
-
-def start_position():
-    # подставка координаты спавна приведений из нашего уровня - 5
-    for yy in range ( (len ( pole_xy )) - 1 ) :
-        for xx in range ( len ( pole_xy[yy] ) - 1 ) :
-            if pole_xy[yy][xx] == 5 :
-                y = yy * 14
-                x = xx * 14
-                return x, y
 
 def main():
     black = (0, 0, 0)
@@ -26,15 +17,13 @@ def main():
     # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
-    x, y = start_position()
-
     lst = [
         #Blinky(x, y, direction='right'),
         #Pinky(x, y, direction='down'),
         #Inky(x, y, direction='left'),
-        Clyde(x, y, direction='up'),
+        Clyde(12 * z + (z-28) // 2, 17 * z + (z-28) // 2, direction='up', speed=1)
     ]
-
+    lst = [Blinky(12 * z + (z-28) // 2, 17 * z + (z-28) // 2, direction='up') for _ in range(20)]
     game_over = False
     while not game_over:
         # clock.tick(FPS)

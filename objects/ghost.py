@@ -1,7 +1,6 @@
 import pygame
 import random
-from objects.field import pole_xy
-from start import start_position
+from objects.field import pole_xy, get_pos_in_field, is_cell_centre
 
 
 class GhostBase:
@@ -35,66 +34,8 @@ class GhostBase:
         pass
 
     def death_move(self): #требует доработки
-        #движение на спавн после смерти
-
-        #выбор направления движения
-
-        x_spawn, y_spawn = start_position()
-        x_spawn /= 14
-        y_spawn /= 14
-        #выбор приоритетного движения для призрака (в какую сторону надо двигаться, чтобы путь до спавна был самый короткий)
-
-        if x > x_spawn:
-            priority_rl = 'left'
-        elif x < x_spawn:
-            priority_rl = 'right'
-        else:
-            priority_rl = 'no'
-
-        if y > y_spawn:
-            priority_ud = 'up'
-        elif y < y_spawn:
-            priority_ud = 'down'
-        else:
-            priority_ud = 'no'
-
-
-        #выбор направения (желательно приоритетного)
-        if int ( pole_xy[y - 1][x] ) == 1 or int ( pole_xy[y - 2][x] ) == 1 or self.direction == 'down' :
-            turn_up = False
-        if int ( pole_xy[y + 1][x] ) == 1 or int ( pole_xy[y + 2][x] ) == 1 or self.direction == 'up' :
-            turn_down = False
-        if int ( pole_xy[y][x + 1] ) == 1 or int ( pole_xy[y][x + 2] ) == 1 or self.direction == 'left' :
-            turn_right = False
-        if int ( pole_xy[y][x - 1] ) == 1 or int ( pole_xy[y][x - 2] ) == 1 or self.direction == 'right' :
-            turn_left = False
-        #проверка, может ли призрак сразу дивагться в сторону спавна
-        if turn_up and priority_ud == 'up':
-            self.direction = 'up'
-            return
-        if turn_down and priority_ud == 'down':
-            self.direction = 'down'
-            return
-        if turn_left and priority_rl == 'left':
-            self.direction = 'left'
-            return
-        if turn_right and priority_rl == 'right':
-            self.direction = 'right'
-            return
-        #если не может, то выбирается случайное направление
-        dir = random.randint(1, 4)
-        if dir == 1 and turn_right :
-            self.direction = 'right'
-            return
-        elif dir == 2 and turn_left :
-            self.direction = 'left'
-            return
-        elif dir == 3 and turn_up :
-            self.direction = 'up'
-            return
-        elif dir == 4 and turn_down :
-            self.direction = 'down'
-            return
+        # TODO: движение на спавн после смерти
+        pass
 
     def image_controller(self):
         if not self.scared or self.is_dead:  # Анимация
@@ -107,59 +48,45 @@ class GhostBase:
         elif self.scared:  # Напуган, когда съедено большое зерно
             self.image = pygame.image.load(GhostBase.scared)
 
+    def get_rand_direction(self, x, y):
+        # выбор направления движения
+
+        # проверка всех возможных путей
+        dir = []
+
+        if pole_xy[y-1][x] != 1 and self.direction != 'down':
+            dir.append('up')
+        if pole_xy[y][x-1] != 1 and self.direction != 'right':
+            dir.append('left')
+        if pole_xy[y+1][x] != 1 and self.direction != 'up':
+            dir.append('down')
+        if pole_xy[y][x+1] != 1 and self.direction != 'left':
+            dir.append('right')
+
+        return dir[random.randint(0, len(dir)-1)] #возвращает случайное направление
+
     def process_logic(self):
         # алгоритм дфижения по коридорам
-        x = int ( self.rect.x / 14 ) # нахожу x и y(в матрцице призраки находятся внутри портала)
-        y = int ( self.rect.y / 14 )
-        print(x, y, pole_xy[y][x])
-        if int(pole_xy[y][x]) == 1:
-            if self.direction == 'up':
-                y += 1
-                self.rect.y = y * 14
-            if self.direction == 'down':
-                y -= 1
-                self.rect.y = y * 14
-            if self.direction == 'left':
-                x += 1
-                self.rect.x = x * 14
-            if self.direction == 'right':
-                x -= 1
-                self.rect.x = x * 14
+        x, y = get_pos_in_field(self.rect.centerx, self.rect.centery)
+        if y == 17:
+            if x == 0:
+                print('lol')
+                self.direction = 'right'
+            if x == 27:
+                self.direction = 'left'
+        if pole_xy[y][x] == 3:
+            if is_cell_centre(self.rect.centerx, self.rect.centery):
+                self.direction = self.get_rand_direction(x, y)
 
-        turn_right = True # 1 - номер направления при случайном выборе
-        turn_left = True # 2 - номер направления при случайном выборе
-        turn_up = True # 3 - номер направления при случайном выборе
-        turn_down = True # 4 - номер направления при случайном выборе
-
-        if int(pole_xy[y][x]) == 3 or int(pole_xy[y][x]) == 5:
-            print(x, y, pole_xy[y][x], self.direction) # проверял x и y
-            if self.is_dead :
-                self.death_move ( x, y, turn_up, turn_right, turn_down, turn_left )
-            else :
-                # выбор направления движения
-
-                # проверка всех возможных путей
-
-                if int ( pole_xy[y - 1][x] ) == 1 or int ( pole_xy[y - 2][x] ) == 1 or self.direction == 'down' :
-                    turn_up = False
-                if int ( pole_xy[y + 1][x] ) == 1 or int ( pole_xy[y + 2][x] ) == 1 or self.direction == 'up' :
-                    turn_down = False
-                if int ( pole_xy[y][x + 1] ) == 1 or int ( pole_xy[y][x + 2] ) == 1 or self.direction == 'left' :
-                    turn_right = False
-                if int ( pole_xy[y][x - 1] ) == 1 or int ( pole_xy[y][x - 2] ) == 1 or self.direction == 'right' :
-                    turn_left = False
-
-                # случайный выбор направления
-                dir = random.randint ( 1, 4 )
-                if dir == 1 and turn_right :
-                    self.direction = 'right'
-                elif dir == 2 and turn_left :
-                    self.direction = 'left'
-                elif dir == 3 and turn_up :
-                    self.direction = 'up'
-                elif dir == 4 and turn_down :
-                    self.direction = 'down'
-
+                if self.direction == 'up':
+                    self.rect.y -= 2
+                if self.direction == 'down':
+                    self.rect.y += 2
+                if self.direction == 'left':
+                    self.rect.x -= 2
+                if self.direction == 'right':
+                    self.rect.x += 2
+                #print(x, y, pole_xy[y][x])
         self.rect.x += self.direction_speed[self.direction][0]
         self.rect.y += self.direction_speed[self.direction][1]
 
