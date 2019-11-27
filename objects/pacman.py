@@ -79,10 +79,10 @@ class Pacman:
 
         if pole_xy[yy][xx] == 3:
             if flag_center:
-                self.direction = self.rotate_memory_dir
+                #self.direction = self.rotate_memory_dir
                 res_flag = self.can_move_in(direction)
             else:
-                self.rotate_memory_dir = direction
+                #self.rotate_memory_dir = direction
                 res_flag = False
 
         else:
@@ -96,8 +96,6 @@ class Pacman:
                     res_flag = self.can_move_in(direction)
                 else:
                     res_flag = False
-
-            self.rotate_memory_dir = self.direction
 
         return res_flag
 
@@ -142,11 +140,15 @@ class Pacman:
     def action(self, ):
         # TODO: повторяются вычисления положения в матрицы и её значение занести в класс
         xx,yy = get_pos_in_field(self.x,self.y)
-        
+
         if self.start:
-            # if pole_xy[yy][xx] == 3 and is_cell_centre(self.x,self.y):
-            #     if self.can_rotate(self.rotate_memory_dir):
-            #         self.direction = self.rotate_memory_dir
+            if pole_xy[yy][xx] == 3:
+                if is_cell_centre(self.x,self.y):
+                    if self.can_rotate(self.rotate_memory_dir):
+                        self.direction = self.rotate_memory_dir
+            else:
+                self.rotate_memory_dir = self.direction
+        
             if self.direction == 'w':
                 if self.can_move_in('w'):
                     self.y -= self.speed

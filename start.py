@@ -57,7 +57,7 @@ def game(screen):
             pacman.start = True
 
         pygame.display.flip()
-        pygame.time.wait(10)
+        pygame.time.wait(20)
 
     sys.exit(0)
 
