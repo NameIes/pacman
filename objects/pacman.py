@@ -115,21 +115,38 @@ class Pacman:
         # print("s - {} -rot {} -can_move_in ".format(
         #     ("YES" if self.can_move_in('s') else "NO"),
         #     ("YES" if self.can_rotate('s') else "NO")))
-        # xx,yy = get_pos_in_field(self.x,self.y)
-        # print(pole_xy[yy][xx])
 
-        if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
-            if pressed[pygame.K_a] and self.can_rotate('a'):
-                self.direction = 'a'
-            if pressed[pygame.K_d] and self.can_rotate('d'):
-                self.direction = 'd'
-            if pressed[pygame.K_w] and self.can_rotate('w'):
-                self.direction = 'w'
-            if pressed[pygame.K_s] and self.can_rotate('s'):
-                self.direction = 's'
+        if event.type == pygame.KEYDOWN: # or event.type == pygame.KEYUP:
+            k = 'f'
+            if pressed[pygame.K_a]:
+                k = 'a'
+            if pressed[pygame.K_d]:
+                k = 'd'
+            if pressed[pygame.K_w]:
+                k = 'w'
+            if pressed[pygame.K_s]:
+                k = 's'
+
+            if k !='f':
+                xx,yy = get_pos_in_field(self.x,self.y)
+                if pole_xy[yy][xx] == 3:
+                    if not is_cell_centre(self.x,self.y):
+                        self.rotate_memory_dir = k
+                    else:
+                        if self.can_rotate(k):
+                            self.direction = k
+                else:
+                    if self.can_rotate(k):
+                        self.direction = k            
 
     def action(self, ):
+        # TODO: повторяются вычисления положения в матрицы и её значение занести в класс
+        xx,yy = get_pos_in_field(self.x,self.y)
+        
         if self.start:
+            # if pole_xy[yy][xx] == 3 and is_cell_centre(self.x,self.y):
+            #     if self.can_rotate(self.rotate_memory_dir):
+            #         self.direction = self.rotate_memory_dir
             if self.direction == 'w':
                 if self.can_move_in('w'):
                     self.y -= self.speed
