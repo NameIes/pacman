@@ -2,8 +2,8 @@
 
 import sys
 import pygame
-from objects.ghosts import Blinky, Pinky, Inky, Clyde
-from objects.field import size, show_field, z
+from objects.ghosts import *
+from objects.field import size, pole_xy, show_field, z
 from objects.pacman import Pacman
 from menu import main_menu
 
@@ -17,19 +17,9 @@ def game(screen):
     # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
-    # Пример
     # TODO: подставлять координаты спавна приведений из нашего уровня
-    lst = [
-        Blinky(10, 10, direction='right'),
-        Pinky(750, 10, direction='down'),
-        Inky(750, 550, direction='left'),
-        Clyde(10, 550, direction='up'),
-        Blinky(300, 200, direction='right'),
-        Blinky(500, 400, direction='left')
-    ]
-    lst[-2].scared = True
-    lst[-1].is_death = True
-    #
+
+    lst = [Blinky(12 * z + (z-28) // 2, 17 * z + (z-28) // 2, direction='up') for _ in range(20)]
 
     game_over = False
     while not game_over:
@@ -44,8 +34,9 @@ def game(screen):
         pacman.action()
 
         screen.fill(black)
+
         show_field(screen, z)
-        # Пример
+
         for i in lst:
             i.process_logic()
             i.process_draw(screen)
