@@ -11,15 +11,16 @@ from menu import main_menu
 def game(screen):
     black = (0, 0, 0)
 
-    pacman = Pacman(14*z, 26*z + z//2)
+    pacman = Pacman(14 * z, 26 * z + z // 2)
 
     # clock = pygame.time.Clock()
     # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
-    # TODO: подставлять координаты спавна приведений из нашего уровня
-
-    lst = [Blinky(12 * z + (z-28) // 2, 17 * z + (z-28) // 2, direction='up') for _ in range(20)]
+    ghosts = [Blinky(12 * z + (z - 28) // 2, 16 * z + (z - 28) // 2),
+              Pinky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
+              Inky(15 * z + (z - 28) // 2, 16 * z + (z - 28) // 2),
+              Clyde(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2)]
 
     game_over = False
     while not game_over:
@@ -29,6 +30,12 @@ def game(screen):
                 game_over = True
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
+
+                # =========================================================== EXAMPLE
+                if pygame.key.get_pressed()[pygame.K_f]:
+                    for i in ghosts:
+                        i.kill()
+                # ===========================================================
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
         pacman.action()
@@ -37,7 +44,7 @@ def game(screen):
 
         show_field(screen, z)
 
-        for i in lst:
+        for i in ghosts:
             i.process_logic()
             i.process_draw(screen)
 
