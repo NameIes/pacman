@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 import sys
-from field import pole_xy, get_pos_in_field, z, SIZE
+from .field import pole_xy, get_pos_in_field, z, size
 
 
 class Grain:
@@ -55,7 +55,7 @@ def main():
     black = (0, 0, 0)
 
     pygame.init()
-    screen = pygame.display.set_mode(SIZE)
+    screen = pygame.display.set_mode(size)
 
     grain_array = []
     spawn_grain(pole_xy, grain_array)
