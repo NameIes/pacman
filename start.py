@@ -4,6 +4,7 @@ import sys
 import pygame
 from objects.ghosts import *
 from objects.field import size, pole_xy, show_field, z
+from objects.grain_spawn import spawn_grain
 from objects.pacman import Pacman
 from menu import main_menu
 
@@ -21,6 +22,9 @@ def game(screen):
               Pinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2),
               Inky(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
               Clyde(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2)]
+
+    grain_array = []
+    spawn_grain(pole_xy, grain_array)
 
     game_over = False
     while not game_over:
@@ -44,11 +48,14 @@ def game(screen):
 
         show_field(screen, z)
 
+        pacman.draw(screen)
+        for grain in grain_array:
+            grain.draw(screen)
+
         for i in ghosts:
             i.process_logic()
             i.process_draw(screen)
 
-        pacman.draw(screen)
         counter_pacman += 1
 
         if counter_pacman > 100:
