@@ -233,9 +233,8 @@ class Pacman:
             R = False
 
         if pole_xy[yy][xx + 1] == 9 and R:
-            pole_xy[yy][xx - 2] = 8
             print('kek9')
-            self.x = 20
+            self.x = 30
             self.y = 246
             R = False
 
