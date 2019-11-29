@@ -5,7 +5,9 @@ import sys
 import math
 import pygame.gfxdraw
 from objects.field import pole_xy, z, is_cell_centre, get_pos_in_field
+
 yellow = 255, 255, 0
+
 
 class Pacman:
     start_angles = {
@@ -28,7 +30,7 @@ class Pacman:
         self.anim_cadr = 0
         self.anim_limit = 6
         self.speed = 1
-        self.radius = z-2
+        self.radius = z - 2
         self.standing = 0
         self.rotate_memory_dir = self.direction  # Запоминание направления
 
@@ -38,7 +40,7 @@ class Pacman:
         res_flag = False
         # print("{} {} {}".format(xx,yy,("YES" if flag_center else "NO")))
         if direction == 'd':
-            if pole_xy[yy][xx + 1] not in [1, 4]:
+            if pole_xy[yy][xx + 1] != 1 and pole_xy[yy][xx + 1] != 9:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -46,7 +48,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 'a':
-            if pole_xy[yy][xx - 1] not in [1, 4]:
+            if pole_xy[yy][xx - 1] != 1 and pole_xy[yy][xx - 1] != 8:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -54,7 +56,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 'w':
-            if pole_xy[yy - 1][xx] not in [1, 4]:
+            if pole_xy[yy - 1][xx] != 1:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -62,7 +64,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 's':
-            if pole_xy[yy + 1][xx] not in [1, 4]:
+            if pole_xy[yy + 1][xx] != 1:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -79,10 +81,10 @@ class Pacman:
 
         if pole_xy[yy][xx] == 3:
             if flag_center:
-                #self.direction = self.rotate_memory_dir
+                # self.direction = self.rotate_memory_dir
                 res_flag = self.can_move_in(direction)
             else:
-                #self.rotate_memory_dir = direction
+                # self.rotate_memory_dir = direction
                 res_flag = False
 
         else:
@@ -114,7 +116,7 @@ class Pacman:
         #     ("YES" if self.can_move_in('s') else "NO"),
         #     ("YES" if self.can_rotate('s') else "NO")))
 
-        if event.type == pygame.KEYDOWN: # or event.type == pygame.KEYUP:
+        if event.type == pygame.KEYDOWN:  # or event.type == pygame.KEYUP:
             k = 'f'
             if pressed[pygame.K_a]:
                 k = 'a'
@@ -125,30 +127,30 @@ class Pacman:
             if pressed[pygame.K_s]:
                 k = 's'
 
-            if k !='f':
-                xx,yy = get_pos_in_field(self.x,self.y)
+            if k != 'f':
+                xx, yy = get_pos_in_field(self.x, self.y)
                 if pole_xy[yy][xx] == 3:
-                    if not is_cell_centre(self.x,self.y):
+                    if not is_cell_centre(self.x, self.y):
                         self.rotate_memory_dir = k
                     else:
                         if self.can_rotate(k):
                             self.direction = k
                 else:
                     if self.can_rotate(k):
-                        self.direction = k            
+                        self.direction = k
 
     def action(self, ):
         # TODO: повторяются вычисления положения в матрицы и её значение занести в класс
-        xx,yy = get_pos_in_field(self.x,self.y)
+        xx, yy = get_pos_in_field(self.x, self.y)
 
         if self.start:
-            if pole_xy[yy][xx] == 3:
-                if is_cell_centre(self.x,self.y):
+            if pole_xy[yy][xx] == 3 or pole_xy[yy][xx] == 8:
+                if is_cell_centre(self.x, self.y):
                     if self.can_rotate(self.rotate_memory_dir):
                         self.direction = self.rotate_memory_dir
             else:
                 self.rotate_memory_dir = self.direction
-        
+
             if self.direction == 'w':
                 if self.can_move_in('w'):
                     self.y -= self.speed
@@ -221,4 +223,19 @@ class Pacman:
 
             # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
             #                    yellow)
+
+    def teleport(self):
+        xx, yy = get_pos_in_field(self.x, self.y)
+        flag_center = is_cell_centre(self.x, self.y)
+        R = True
+        if pole_xy[yy][xx - 1] == 8 and R:
+            self.x = 346
+            self.y = 246
+            R = False
+
+        if pole_xy[yy][xx + 1] == 9 and R:
+            self.x = 30
+            self.y = 246
+            R = False
+
 

@@ -43,7 +43,7 @@ def game(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
         pacman.action()
-
+        pacman.teleport()
         screen.fill(black)
 
         show_field(screen, z)

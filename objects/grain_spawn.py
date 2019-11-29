@@ -31,7 +31,7 @@ class Energizer(Grain):
 def spawn_grain(pole_xy, grain_array):
     for i in range(len(pole_xy)):
         for j in range(len(pole_xy[0])):
-            if pole_xy[i][j] == 0 or pole_xy[i][j] == 3:
+            if pole_xy[i][j] == 0 or pole_xy[i][j] == 3 or pole_xy[i][j] == 8:
                 x = j * z + z // 2
                 y = i * z + z // 2
                 # Действует только для текущего поля
