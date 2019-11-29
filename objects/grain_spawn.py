@@ -3,11 +3,8 @@ import pygame
 import sys
 from field import pole_xy, get_pos_in_field, z, SIZE
 
-grain_array = []
-
 
 class Grain:
-
     def __init__(self, center_x, center_y, radius=2, color=(255, 255, 0)):
         self.center_x = center_x
         self.center_y = center_y
@@ -15,17 +12,19 @@ class Grain:
         self.color = color
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, (self.center_x, self.center_y), self.radius)
+        pygame.draw.circle(screen, self.color, (self.center_x, self.center_y),
+                           self.radius)
+
 
 class Energizer(Grain):
+    def __init__(self, center_x, center_y, radius=2, color=(255, 255, 0)):
+        super().__init__(center_x, center_y)
+        self.radius = 7
 
-   def __init__(self, center_x, center_y, radius = 2, color = (255, 255, 0)):
-       super().__init__(center_x, center_y)
-       self.radius = 7
-
-       # TODO: Переписать класс, так чтобы при отрисовке он менял радиус свой и мигал
-   def draw(self, screen):
-       pygame.draw.circle(screen, self.color,(self.center_x, self.center_y), self.radius)
+        # TODO: Переписать класс, так чтобы при отрисовке он менял радиус свой и мигал
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (self.center_x, self.center_y),
+                           self.radius)
 
 
 # Функция постановки зёрен на поле
@@ -33,15 +32,18 @@ def spawn_grain(pole_xy, grain_array):
     for i in range(len(pole_xy)):
         for j in range(len(pole_xy[0])):
             if pole_xy[i][j] == 0 or pole_xy[i][j] == 3:
-                x = j * z + z//2
-                y = i * z + z//2
-                # TODO: Условия простановки энерджайзера
-                grain_array.append(Grain(x,y))
+                x = j * z + z // 2
+                y = i * z + z // 2
+                # Действует только для текущего поля
+                if (i == 6 or i == 26) and (j == 1 or j == 26):
+                    grain_array.append(Energizer(x, y))
+                else:
+                    grain_array.append(Grain(x, y))
 
 
 def check_grain(x, y, xx, yy, grain_array):
-    x = xx * z + z//2
-    y = yy * z + z//2
+    x = xx * z + z // 2
+    y = yy * z + z // 2
     for grain in grain_array:
         if grain.center_y == y and grain.center_x == x:
             return True
@@ -56,7 +58,7 @@ def main():
     screen = pygame.display.set_mode(SIZE)
 
     grain_array = []
-    spawn_grain(pole_xy,grain_array)
+    spawn_grain(pole_xy, grain_array)
     print(len(grain_array))
 
     game_over = False
