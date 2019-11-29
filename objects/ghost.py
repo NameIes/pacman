@@ -22,12 +22,15 @@ class GhostBase:
         self.direction = direction
         self.direction_speed = GhostBase.direction_vector.copy()
         self.set_speed(speed)
-        self.scared = False
 
         self.is_killed = False
         self._is_dead = False
         self.is_dead_process = False
         self.is_dead_path = []
+        self.is_dead_time = 100
+        self.is_dead_timer = 0
+
+        self.scared = False
 
     def set_speed(self, speed):
         for item in self.direction_speed:
@@ -47,7 +50,9 @@ class GhostBase:
         m_field = push_wave(y, x, 1, len(pole_xy), len(pole_xy[0]), m_field)
 
         # Восстанавливаем путь
-        self.is_dead_path = get_path((y, x), (17, 12), m_field, len(m_field), len(m_field[0]))
+        spawn_points = [(17, 12), (17, 13), (17, 14), (17, 15)]
+
+        self.is_dead_path = get_path((y, x), spawn_points[random.randint(0, 3)], m_field, len(m_field), len(m_field[0]))
         self.is_dead_path = modify_path(self.is_dead_path)
 
     def _push(self):
@@ -67,7 +72,6 @@ class GhostBase:
             self.is_dead_process = False
             self._is_dead = False
             self.is_killed = False
-            self.is_dead_path = []
             return
 
         # Устанавливаем нужное направление в зависимости от координаты
@@ -99,16 +103,24 @@ class GhostBase:
     def kill(self):
         self.is_killed = True
 
+    def escape_move(self):
+        x, y = get_pos_in_field(self.rect.centerx, self.rect.centery)
+
+        if x not in [13, 14] and is_cell_centre(self.rect.centerx, self.rect.centery):
+            self.direction = 'left' if x > 13 else 'right'
+        elif x in [13, 14] and is_cell_centre(self.rect.centerx, self.rect.centery):
+            self.direction = 'up'
+
     def get_rand_direction(self, x, y):
         p_dirs = []
 
-        if pole_xy[y-1][x] != 1 and self.direction != 'down':
+        if pole_xy[y - 1][x] not in [1, 4] and self.direction != 'down':
             p_dirs.append('up')
-        if pole_xy[y][x-1] != 1 and self.direction != 'right':
+        if pole_xy[y][x - 1] not in [1, 4] and self.direction != 'right':
             p_dirs.append('left')
-        if pole_xy[y+1][x] != 1 and self.direction != 'up':
+        if pole_xy[y + 1][x] not in [1, 4] and self.direction != 'up':
             p_dirs.append('down')
-        if pole_xy[y][x+1] != 1 and self.direction != 'left':
+        if pole_xy[y][x + 1] not in [1, 4] and self.direction != 'left':
             p_dirs.append('right')
 
         return p_dirs[random.randint(0, len(p_dirs) - 1)]
@@ -125,12 +137,16 @@ class GhostBase:
 
         self.image_controller()
 
+        x, y = get_pos_in_field(self.rect.centerx, self.rect.centery)
+        if pole_xy[y][x] == 4:
+            self.escape_move()
+            return
+
         if self.scared:
             self.scared_move()
             return
 
         # OLD ALGORITHM =====================================================
-        x, y = get_pos_in_field(self.rect.centerx, self.rect.centery)
         if y == 17:
             if x == 0:
                 self.direction = 'right'

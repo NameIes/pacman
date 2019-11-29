@@ -17,10 +17,10 @@ def game(screen):
     # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
-    ghosts = [Blinky(12 * z + (z - 28) // 2, 16 * z + (z - 28) // 2),
-              Pinky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
-              Inky(15 * z + (z - 28) // 2, 16 * z + (z - 28) // 2),
-              Clyde(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2)]
+    ghosts = [Blinky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
+              Pinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2),
+              Inky(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
+              Clyde(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2)]
 
     game_over = False
     while not game_over:

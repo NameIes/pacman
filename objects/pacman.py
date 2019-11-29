@@ -38,7 +38,7 @@ class Pacman:
         res_flag = False
         # print("{} {} {}".format(xx,yy,("YES" if flag_center else "NO")))
         if direction == 'd':
-            if pole_xy[yy][xx + 1] != 1:
+            if pole_xy[yy][xx + 1] not in [1, 4]:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -46,7 +46,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 'a':
-            if pole_xy[yy][xx - 1] != 1:
+            if pole_xy[yy][xx - 1] not in [1, 4]:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -54,7 +54,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 'w':
-            if pole_xy[yy - 1][xx] != 1:
+            if pole_xy[yy - 1][xx] not in [1, 4]:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -62,7 +62,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 's':
-            if pole_xy[yy + 1][xx] != 1:
+            if pole_xy[yy + 1][xx] not in [1, 4]:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
