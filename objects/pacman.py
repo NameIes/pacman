@@ -38,7 +38,7 @@ class Pacman:
         res_flag = False
         # print("{} {} {}".format(xx,yy,("YES" if flag_center else "NO")))
         if direction == 'd':
-            if pole_xy[yy][xx + 1] != 1:
+            if pole_xy[yy][xx + 1] != 1 and pole_xy[yy][xx+1] != 9:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -46,7 +46,7 @@ class Pacman:
                 else:
                     res_flag = True
         elif direction == 'a':
-            if pole_xy[yy][xx - 1] != 1:
+            if pole_xy[yy][xx - 1] != 1 and pole_xy[yy][xx-1] != 8:
                 res_flag = True
             else:
                 if flag_center:  # Если впереди стенами но мы не достигли центра клетки
@@ -142,7 +142,7 @@ class Pacman:
         xx,yy = get_pos_in_field(self.x,self.y)
 
         if self.start:
-            if pole_xy[yy][xx] == 3:
+            if pole_xy[yy][xx] == 3 or pole_xy[yy][xx] == 8:
                 if is_cell_centre(self.x,self.y):
                     if self.can_rotate(self.rotate_memory_dir):
                         self.direction = self.rotate_memory_dir
@@ -221,4 +221,21 @@ class Pacman:
 
             # pygame.gfxdraw.pie(screen, self.y, self.y, self.radius, 15, 345,
             #                    yellow)
+
+    def teleport(self):
+        xx, yy = get_pos_in_field(self.x, self.y)
+        flag_center = is_cell_centre(self.x, self.y)
+        R = True
+        if pole_xy[yy][xx - 1] == 8 and R == True:
+            print('kek8')
+            pole_xy[yy][xx + 2] = 9
+            R = False
+
+        if pole_xy[yy][xx + 1] == 9 and R == True:
+            pole_xy[yy][xx - 2] = 8
+            print('kek9')
+            R = False
+
+
+
 
