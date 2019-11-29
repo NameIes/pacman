@@ -226,14 +226,17 @@ class Pacman:
         xx, yy = get_pos_in_field(self.x, self.y)
         flag_center = is_cell_centre(self.x, self.y)
         R = True
-        if pole_xy[yy][xx - 1] == 8 and R == True:
+        if pole_xy[yy][xx - 1] == 8 and R:
             print('kek8')
-            pole_xy[yy][xx + 2] = 9
+            self.x = 346
+            self.y = 246
             R = False
 
-        if pole_xy[yy][xx + 1] == 9 and R == True:
+        if pole_xy[yy][xx + 1] == 9 and R:
             pole_xy[yy][xx - 2] = 8
             print('kek9')
+            self.x = 20
+            self.y = 246
             R = False
 
 
