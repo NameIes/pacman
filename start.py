@@ -3,15 +3,15 @@
 import sys
 import pygame
 from objects.ghosts import *
-from objects.field import size, pole_xy, show_field, z
-from objects.grain_spawn import spawn_grain
+from objects.field import size, pole_xy, show_field, z, is_cell_centre, get_pos_in_field
+from objects.grain_spawn import spawn_grain, check_and_remove_grain
 from objects.pacman import Pacman
 from menu import main_menu
 
 
 def game(screen):
     black = (0, 0, 0)
-
+    score = 0
     pacman = Pacman(14 * z, 26 * z + z // 2)
 
     # clock = pygame.time.Clock()
@@ -47,6 +47,11 @@ def game(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
         pacman.action()
+        if is_cell_centre(pacman.x, pacman.y):
+            pxx, pyy = get_pos_in_field(pacman.x, pacman.y)
+            if check_and_remove_grain(pxx,pyy,grain_array):
+                score += 10
+                print("{} {}".format(score, len(grain_array)))
         pacman.teleport()
         screen.fill(black)
 

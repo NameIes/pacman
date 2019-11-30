@@ -41,15 +41,18 @@ def spawn_grain(pole_xy, grain_array):
                     grain_array.append(Grain(x, y))
 
 
-def check_grain(x, y, xx, yy, grain_array):
+def check_and_remove_grain(xx, yy, grain_array):
     x = xx * z + z // 2
     y = yy * z + z // 2
+    flag_res = False
     for grain in grain_array:
         if grain.center_y == y and grain.center_x == x:
-            return True
-        else:
-            return False
-
+            grain_array.remove(grain)
+            flag_res = True
+    
+    # if flag_res:
+    #     grain_array = [grain for grain in grain_array if (grain.center_y == y and grain.center_x == x)]
+    return flag_res
 
 def main():
     black = (0, 0, 0)
