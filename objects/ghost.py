@@ -45,14 +45,16 @@ class GhostBase:
         # Делаем копию поля, где стены -1, а дорожки 0
         m_field = prepare_field([1, 2], pole_xy.copy())
 
+        # Получаем конечную точку
+        spawn_points = [(17, 12), (17, 13), (17, 14), (17, 15)]
+        r_point = spawn_points[random.randint(0, 3)]
+
         # Распространяем волну алгоритма Ли
         x, y = get_pos_in_field(self.rect.centerx, self.rect.centery)
-        m_field = push_wave(y, x, 1, len(pole_xy), len(pole_xy[0]), m_field)
+        m_field = push_wave(y, x, 1, len(pole_xy), len(pole_xy[0]), m_field, r_point)
 
         # Восстанавливаем путь
-        spawn_points = [(17, 12), (17, 13), (17, 14), (17, 15)]
-
-        self.is_dead_path = get_path((y, x), spawn_points[random.randint(0, 3)], m_field, len(m_field), len(m_field[0]))
+        self.is_dead_path = get_path((y, x), r_point, m_field, len(m_field), len(m_field[0]))
         self.is_dead_path = modify_path(self.is_dead_path)
 
     def _push(self):

@@ -12,21 +12,26 @@ def prepare_field(walls_id, field):
     return t_maze
 
 
-def push_wave(y, x, lvl, h, w, field):
+def push_wave(y, x, lvl, h, w, field, end, isf=False):
     field[y][x] = lvl
+
+    if (y, x) == end:
+        isf=True
+    if isf:
+        return field
 
     if x + 1 < w:
         if field[y][x + 1] == 0 or (field[y][x + 1] != -1 and field[y][x + 1] > lvl):
-            push_wave(y, x + 1, lvl + 1, h, w, field)
+            push_wave(y, x + 1, lvl + 1, h, w, field, end, isf)
     if y + 1 < h:
         if field[y + 1][x] == 0 or (field[y + 1][x] != -1 and field[y + 1][x] > lvl):
-            push_wave(y + 1, x, lvl + 1, h, w, field)
+            push_wave(y + 1, x, lvl + 1, h, w, field, end, isf)
     if y - 1 >= 0:
         if field[y - 1][x] == 0 or (field[y - 1][x] != -1 and field[y - 1][x] > lvl):
-            push_wave(y - 1, x, lvl + 1, h, w, field)
+            push_wave(y - 1, x, lvl + 1, h, w, field, end, isf)
     if x - 1 >= 0:
         if field[y][x - 1] == 0 or (field[y][x - 1] != -1 and field[y][x - 1] > lvl):
-            push_wave(y, x - 1, lvl + 1, h, w, field)
+            push_wave(y, x - 1, lvl + 1, h, w, field, end, isf)
 
     return field
 
