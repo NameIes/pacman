@@ -18,4 +18,4 @@ def paused():
                 if chr(event.key) == 'p':
                     pause_flag = False
         text_pause.draw(screen)
-        #pygame.display.update()
+        pygame.display.update()
