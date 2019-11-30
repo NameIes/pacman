@@ -14,7 +14,7 @@ def game(screen):
 
     pacman = Pacman(14 * z, 26 * z + z // 2)
 
-    # clock = pygame.time.Clock()
+    clock = pygame.time.Clock()
     # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
@@ -26,16 +26,32 @@ def game(screen):
     grain_array = []
     spawn_grain(pole_xy, grain_array)
 
-    game_over = False
-    while not game_over:
-        # clock.tick(FPS)
+
+    game_quit = False
+    while not game_quit:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_over = True
+                game_quit = True
+                screen.fill(black)
+                pygame.display.flip()
+                yellow = (255, 255, 0)  # желтый
+                blue = (0, 0, 255)  # синий
+                white = (255, 255, 255)  # белый
+                fontObj = pygame.font.Font('freesansbold.ttf', 50)
+                textSurfaceObj = fontObj.render('You Lose!', True, white)
+                textRectObj = textSurfaceObj.get_rect()
+                textRectObj.center = (200, 200)
+
+                screen.blit(textSurfaceObj, textRectObj)
+                pygame.display.flip()
+                pygame.time.delay(3000)
+
+
+
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
 
-                # =========================================================== EXAMPLE
+                    # =========================================================== EXAMPLE
                 if pygame.key.get_pressed()[pygame.K_f]:
                     for i in ghosts:
                         i.kill()
@@ -43,7 +59,7 @@ def game(screen):
                 if pygame.key.get_pressed()[pygame.K_g]:
                     for i in ghosts:
                         i.scared = True
-                # ===========================================================
+                    # ===========================================================
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
         pacman.action()
