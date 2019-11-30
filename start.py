@@ -31,11 +31,7 @@ def main():
 	#
 
 	game_over = False
-
 	pause_flag = False
-	text_pause = Text("PAUSE", 100)
-	text_pause_size = text_pause.get_text_size()
-	text_pause.update_position(size[0] / 2 - text_pause_size[0] / 2, size[1] / 2 - text_pause_size[1] / 2)
 
 	while not game_over:
 		for event in pygame.event.get():
@@ -52,9 +48,6 @@ def main():
 		for i in lst:
 			i.process_logic()
 			i.process_draw(screen)
-
-		if pause_flag:
-			text_pause.draw(screen)
 
 		pygame.display.flip()
 		pygame.time.wait(10)
