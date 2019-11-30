@@ -8,8 +8,6 @@ from objects.grain_spawn import spawn_grain
 from objects.pacman import Pacman
 from menu import main_menu
 
-from random import randint
-
 
 def game(screen):
     black = (0, 0, 0)

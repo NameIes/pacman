@@ -118,22 +118,22 @@ def fig_6(screen, color=(0, 0, 255), a=int(0), b=int(0), w=100, h=200, m=40, r=5
                       , d)
 
 
-def angle_1(screen, color=(0, 0, 255), a=int(0), b=int(0), w=16, h=16, m=4, r=5, d=1, z=1):
+def angle_1(screen, color=(0, 0, 255), a=int(0), b=int(0), w=16, h=16, m=4, r=5, d=1, z=1, c=0):
     pygame.draw.lines(screen, color, False,
-                      [[a, b + h * z], [a, b + r], [a + r, b], [a + w * z, b], ]
+                      [[a, b + h * z], [a, b + r], [a + r, b], [a + w * z-c, b], ]
                       , d)
     pygame.draw.lines(screen, color, False,
                       [[a + m * z, b + h * z], [a + m * z, b + m * z + r], [a + m * z + r, b + m * z],
-                       [a + w * z, b + m * z]]
+                       [a + w * z-c, b + m * z]]
                       , d)
 
 
-def angle_2(screen, color=(0, 0, 255), a=int(0), b=int(0), w=16, h=16, m=4, r=5, d=1, z=1):
+def angle_2(screen, color=(0, 0, 255), a=int(0), b=int(0), w=16, h=16, m=4, r=5, d=1, z=1, c=0):
     pygame.draw.lines(screen, color, False,
-                      [[a, b], [a + w * z - r, b], [a + w * z, b + r], [a + w * z, b + h * z]]
+                      [[a+c, b], [a + w * z - r, b], [a + w * z, b + r], [a + w * z, b + h * z]]
                       , d)
     pygame.draw.lines(screen, color, False,
-                      [[a, b + m * z], [a + w * z - m * z - r, b + m * z], [a + w * z - m * z, b + m * z + r],
+                      [[a+c, b + m * z], [a + w * z - m * z - r, b + m * z], [a + w * z - m * z, b + m * z + r],
                        [a + w * z - m * z, b + h * z]]
                       , d)
 
