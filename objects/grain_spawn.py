@@ -44,14 +44,15 @@ def spawn_grain(pole_xy, grain_array):
 def check_and_remove_grain(xx, yy, grain_array):
     x = xx * z + z // 2
     y = yy * z + z // 2
-    flag_res = False
+    flag_res = 0
     for grain in grain_array:
         if grain.center_y == y and grain.center_x == x:
+            if type(grain) == type(Energizer):  # Это на случай вишни
+                flag_res = 20
+            else:
+                flag_res = 10
             grain_array.remove(grain)
-            flag_res = True
-    
-    # if flag_res:
-    #     grain_array = [grain for grain in grain_array if (grain.center_y == y and grain.center_x == x)]
+
     return flag_res
 
 def main():
