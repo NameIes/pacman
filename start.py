@@ -8,6 +8,8 @@ from objects.grain_spawn import spawn_grain
 from objects.pacman import Pacman
 from menu import main_menu
 
+from random import randint
+
 
 def game(screen):
     black = (0, 0, 0)
@@ -39,6 +41,10 @@ def game(screen):
                 if pygame.key.get_pressed()[pygame.K_f]:
                     for i in ghosts:
                         i.kill()
+
+                if pygame.key.get_pressed()[pygame.K_g]:
+                    for i in ghosts:
+                        i.scared = True
                 # ===========================================================
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())

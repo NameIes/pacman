@@ -6,9 +6,10 @@ from objects.lee_pathfinder import *
 
 class GhostBase:
     scared = 'res/img/scared.png'
-    direction_vector = {'up': [0, -1], 'down': [0, 1], 'left': [-1, 0], 'right': [1, 0]}
 
     def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None, speed=1):
+        self.direction_vector = {'up': [0, -1], 'down': [0, 1], 'left': [-1, 0], 'right': [1, 0]}
+
         self.pacman_rect = pacman_rect  # Будет нужно для ИИ движения
 
         self.images = None
@@ -20,22 +21,24 @@ class GhostBase:
         self.anim_stage = True
 
         self.direction = direction
-        self.direction_speed = GhostBase.direction_vector.copy()
+        self.direction_speed = self.direction_vector.copy()
         self.set_speed(speed)
 
         self.is_killed = False
         self._is_dead = False
         self.is_dead_process = False
         self.is_dead_path = []
-        self.is_dead_time = 100
-        self.is_dead_timer = 0
 
         self.scared = False
+        self.scared_time = 500
+        self.scared_timer = 0
 
     def set_speed(self, speed):
         for item in self.direction_speed:
-            self.direction_speed[item][0] *= speed
-            self.direction_speed[item][1] *= speed
+            if self.direction_speed[item][0] != 0:
+                self.direction_speed[item][0] = speed if self.direction_speed[item][0] > 0 else -speed
+            if self.direction_speed[item][1] != 0:
+                self.direction_speed[item][1] = speed if self.direction_speed[item][1] > 0 else -speed
 
     def scared_move(self):
         # TODO: Реализовать движение при испуге
@@ -74,6 +77,8 @@ class GhostBase:
             self.is_dead_process = False
             self._is_dead = False
             self.is_killed = False
+            self.scared = False
+            self.set_speed(1)
             return
 
         # Устанавливаем нужное направление в зависимости от координаты
@@ -90,6 +95,7 @@ class GhostBase:
     def death_move(self):
         # Вызываем функцию поиска пути один раз
         if not self.is_dead_process:
+            self.set_speed(2)
             self._find_path()
             self._set_death_direction()
             self.is_dead_process = True
@@ -145,8 +151,10 @@ class GhostBase:
             return
 
         if self.scared:
-            self.scared_move()
-            return
+            self.scared_timer += 1
+            if self.scared_timer == self.scared_time:
+                self.scared = False
+                self.scared_timer = 0
 
         # OLD ALGORITHM =====================================================
         if y == 17:
@@ -181,7 +189,7 @@ class GhostBase:
         if not self._is_dead:
             screen.blit(self.image, self.rect)
 
-        if self.scared:
+        if self.scared and not self._is_dead:
             return
 
         # Глаза
