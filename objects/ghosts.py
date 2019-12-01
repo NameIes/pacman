@@ -1,5 +1,6 @@
 from objects.ghost import GhostBase
 from objects.field import get_pos_in_field
+from copy import deepcopy
 
 
 class Blinky(GhostBase):
@@ -67,7 +68,7 @@ class Inky(GhostBase):
     def calc_vectors(self, possible_directions):
         vectors = []
         for dirs in possible_directions:
-            gx, gy = self.blinky_obj.in_field_x, self.blinky_obj.in_field_y
+            gx, gy = deepcopy(self.blinky_obj.in_field_x), deepcopy(self.blinky_obj.in_field_y)
             px, py = get_pos_in_field(self.pacman_obj.x, self.pacman_obj.y)
 
             if self.pacman_obj.direction == 'w':
