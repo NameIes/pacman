@@ -19,7 +19,7 @@ class GhostBase:
     }
     direction_vector = {'up': [0, -1], 'down': [0, 1], 'left': [-1, 0], 'right': [1, 0]}
 
-    def __init__(self, x, y, ghost_name, pacman_obj=None, move_speed=1, anim_speed=10, direction='up'):
+    def __init__(self, x, y, ghost_name, pacman_obj, move_speed=1, anim_speed=10, direction='up'):
         self.pacman_obj = pacman_obj
 
         self.images = GhostBase.images[ghost_name]
@@ -43,6 +43,10 @@ class GhostBase:
         self.is_dead_process = False
         self.is_dead_path = []
 
+        self.is_dead_timer_started = False
+        self.is_dead_time = 1000
+        self.is_dead_timer = 0
+
         self.scared = False
         self.scared_time = 500
         self.scared_timer = 0
@@ -54,16 +58,23 @@ class GhostBase:
             self.direction_speed[item][1] *= speed
 
     def scared_move(self):
-        # TODO: Реализовать движение при испуге
-        pass
+        if self.in_field_y == 17:
+            if self.in_field_x == 0:
+                self.direction = 'right'
+            if self.in_field_x == 27:
+                self.direction = 'left'
+        if pole_xy[self.in_field_y][self.in_field_x] == 3:
+            if is_cell_centre(self.rect.centerx, self.rect.centery):
+                possible_directions = self.get_possible_directions()
+                self.direction = possible_directions[randint(0, len(possible_directions) - 1)]
+                self._push_towards()
 
     def _find_path(self):
         # Делаем копию поля, где стены -1, а дорожки 0
         prepared_field = prepare_field([1, 2], pole_xy.copy())
 
-        # Получаем конечную точку
-        spawn_points = [(17, 12), (17, 13), (17, 14), (17, 15)]
-        end_point = spawn_points[randint(0, 3)]
+        end_points = [(17, 12), (17, 13), (17, 14), (17, 15)]
+        end_point = end_points[randint(0, 3)]
 
         # Распространяем волну алгоритма Ли
         prepared_field = push_wave(self.in_field_y, self.in_field_x, 1, len(pole_xy), len(pole_xy[0]), prepared_field,
@@ -86,7 +97,6 @@ class GhostBase:
             self.rect.x += 2
 
     def _set_death_direction(self):
-        # Устанавливаем нужное направление в зависимости от координаты
         if self.in_field_y < self.is_dead_path[0][1]:
             self.direction = 'down'
         if self.in_field_y > self.is_dead_path[0][1]:
@@ -95,6 +105,14 @@ class GhostBase:
             self.direction = 'right'
         if self.in_field_x > self.is_dead_path[0][0]:
             self.direction = 'left'
+
+    def death_timer(self):
+        self.is_dead_timer += 1
+        if self.is_dead_timer == self.is_dead_time:
+            self.is_dead = False
+            self.is_dead_timer = 0
+            self.is_dead_timer_started = False
+            self.set_move_speed(1)
 
     def death_move(self):
         # Вызываем функцию поиска пути один раз
@@ -111,10 +129,10 @@ class GhostBase:
 
                 # Проверяем вернулся ли призрак в клетку
                 if len(self.is_dead_path) == 0:
+                    self.set_move_speed(0)
                     self.is_dead_process = False
-                    self.is_dead = False
                     self.scared = False
-                    self.set_move_speed(1)
+                    self.is_dead_timer_started = True
                     return
 
                 self._set_death_direction()
@@ -129,58 +147,74 @@ class GhostBase:
         elif self.in_field_x in [13, 14] and is_cell_centre(self.rect.centerx, self.rect.centery):
             self.direction = 'up'
 
-    def get_rand_direction(self, x, y):
+    def get_possible_directions(self):
         p_dirs = []
 
-        if pole_xy[y - 1][x] not in [1, 4] and self.direction != 'down':
+        if pole_xy[self.in_field_y - 1][self.in_field_x] not in [1, 4] and self.direction != 'down':
             p_dirs.append('up')
-        if pole_xy[y][x - 1] not in [1, 4] and self.direction != 'right':
+        if pole_xy[self.in_field_y][self.in_field_x - 1] not in [1, 4] and self.direction != 'right':
             p_dirs.append('left')
-        if pole_xy[y + 1][x] not in [1, 4] and self.direction != 'up':
+        if pole_xy[self.in_field_y + 1][self.in_field_x] not in [1, 4] and self.direction != 'up':
             p_dirs.append('down')
-        if pole_xy[y][x + 1] not in [1, 4] and self.direction != 'left':
+        if pole_xy[self.in_field_y][self.in_field_x + 1] not in [1, 4] and self.direction != 'left':
             p_dirs.append('right')
 
-        return p_dirs[randint(0, len(p_dirs) - 1)]
+        return p_dirs
+
+    def calc_vectors(self, possible_directions):
+        pass
+
+    def _process_move(self):
+        if pole_xy[self.in_field_y][self.in_field_x] == 3:
+            if is_cell_centre(self.rect.centerx, self.rect.centery):
+                possible_directions = self.get_possible_directions()
+
+                if len(possible_directions) == 1:
+                    self.direction = possible_directions[0]
+
+                vectors = self.calc_vectors(possible_directions)
+
+                ind = 0
+                min_v = 1000
+                for i in range(len(vectors)):
+                    if vectors[i] < min_v:
+                        min_v = vectors[i]
+                        ind = i
+
+                self.direction = possible_directions[ind]
 
     def process_logic(self):
-        # Узнаем позицию в поле
         self.in_field_x, self.in_field_y = get_pos_in_field(self.rect.centerx, self.rect.centery)
 
-        # Движение в направлении
         self.rect.x += self.direction_speed[self.direction][0]
         self.rect.y += self.direction_speed[self.direction][1]
 
-        # Возращение в клетку после смерти
         if self.is_dead and is_cell_centre(self.rect.centerx, self.rect.centery):
-            self.death_move()
+            if self.is_dead_timer_started:
+                self.death_timer()
+            else:
+                self.death_move()
             return
 
-        # Адекватный выход из клетки
         if pole_xy[self.in_field_y][self.in_field_x] == 4:
             self.escape_move()
             return
 
-        # Режим паники
         if self.scared:
             self.scared_timer += 1
             if self.scared_timer == self.scared_time:
                 self.scared = False
                 self.scared_timer = 0
+            self.scared_move()
+            return
 
-        # Алгоритм поведения привидений
-        # OLD ALGORITHM =====================================================
+        self._process_move()
+
         if self.in_field_y == 17:
             if self.in_field_x == 0:
                 self.direction = 'right'
             if self.in_field_x == 27:
                 self.direction = 'left'
-        if pole_xy[self.in_field_y][self.in_field_x] == 3:
-            if is_cell_centre(self.rect.centerx, self.rect.centery):
-                self.direction = self.get_rand_direction(self.in_field_x, self.in_field_y)
-
-                self._push_towards()
-        # ===================================================================
 
     def _set_pupil_pos(self, screen, left, right):
         pygame.draw.rect(screen, (22, 0, 255), (self.rect[0] + left[0], self.rect[1] + left[1], 4, 5))

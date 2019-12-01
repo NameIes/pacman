@@ -18,10 +18,11 @@ def game(screen):
     # этот параметр нужен для отсчета времени старта
     counter_pacman = 0
 
-    ghosts = [Blinky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
-              Pinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2),
-              Inky(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
-              Clyde(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2)]
+    ghosts = [Blinky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman),
+              Pinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
+              Clyde(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman)]
+
+    ghosts.append(Inky(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman, ghosts[0]))
 
     grain_array = []
     spawn_grain(pole_xy, grain_array)
@@ -42,6 +43,7 @@ def game(screen):
 
                 if pygame.key.get_pressed()[pygame.K_g]:
                     for i in ghosts:
+                        i.set_move_speed(1)
                         i.scared = True
                 # ===========================================================
             if event.type == pygame.MOUSEBUTTONDOWN:
