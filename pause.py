@@ -1,14 +1,16 @@
 import pygame
-from objects.field import pole_xy, show_field, size
+from objects.field import size
 from ready import Text
 
 
-def paused():
+def paused(screen):
     pause_flag = True
-    screen = pygame.display.set_mode(size)
     text_pause = Text("PAUSE", 100)
     text_pause_size = text_pause.get_text_size()
-    text_pause.update_position(size[0] / 2 - text_pause_size[0] / 2, size[1] / 2 - text_pause_size[1] / 2)
+    tx = (size[0] - text_pause_size[0]) // 2
+    ty = (size[1] - text_pause_size[1]) // 2
+    text_pause.update_position(tx, ty)
+
     while pause_flag:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

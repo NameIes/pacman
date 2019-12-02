@@ -27,6 +27,9 @@ def game(screen):
     grain_array = []
     spawn_grain(pole_xy, grain_array)
 
+    under_layer = pygame.Surface(size)
+    show_field(under_layer, z)
+    
     game_over = False
     pause_flag = False
     while not game_over:
@@ -36,7 +39,7 @@ def game(screen):
                 game_over = True
             if event.type == pygame.KEYDOWN:
                 if chr(event.key) == 'p':
-                    paused()
+                    paused(screen)
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
 
@@ -55,7 +58,8 @@ def game(screen):
         pacman.teleport()
         screen.fill(black)
 
-        show_field(screen, z)
+        #show_field(screen, z)
+        screen.blit(under_layer, (0,0))
 
         pacman.draw(screen)
         for grain in grain_array:
