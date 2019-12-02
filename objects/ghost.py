@@ -19,8 +19,12 @@ class GhostBase:
     }
     direction_vector = {'up': [0, -1], 'down': [0, 1], 'left': [-1, 0], 'right': [1, 0]}
 
-    def __init__(self, x, y, ghost_name, pacman_obj, move_speed=1, anim_speed=10, direction='up'):
+    def __init__(self, x, y, ghost_name, pacman_obj, move_speed, anim_speed, direction):
         self.pacman_obj = pacman_obj
+
+        self.started = False
+        self.start_after = 0
+        self.score = 0
 
         self.images = GhostBase.images[ghost_name]
         self.current_image = self.images[0]
@@ -50,6 +54,9 @@ class GhostBase:
         self.scared = False
         self.scared_time = 500
         self.scared_timer = 0
+
+    def set_score(self, score):
+        self.score = score
 
     def set_move_speed(self, speed):
         self.direction_speed = deepcopy(GhostBase.direction_vector)
@@ -184,6 +191,12 @@ class GhostBase:
                 self.direction = possible_directions[ind]
 
     def process_logic(self):
+        if self.started:
+            self.set_move_speed(1)
+
+        if not self.started and self.score // 10 > self.start_after:
+            self.started = True
+
         self.in_field_x, self.in_field_y = get_pos_in_field(self.rect.centerx, self.rect.centery)
 
         self.rect.x += self.direction_speed[self.direction][0]

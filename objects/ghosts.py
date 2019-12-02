@@ -4,8 +4,9 @@ from copy import deepcopy
 
 
 class Blinky(GhostBase):
-    def __init__(self, x, y, pacman_obj, move_speed=1, anim_speed=10, direction='up'):
+    def __init__(self, x, y, pacman_obj, move_speed=0, anim_speed=10, direction='up'):
         super().__init__(x, y, 'blinky', pacman_obj, move_speed, anim_speed, direction)
+        self.start_after = 1
 
     def calc_vectors(self, possible_directions):
         vectors = []
@@ -27,8 +28,9 @@ class Blinky(GhostBase):
 
 
 class Pinky(GhostBase):
-    def __init__(self, x, y, pacman_obj, move_speed=1, anim_speed=10, direction='up'):
+    def __init__(self, x, y, pacman_obj, move_speed=0, anim_speed=10, direction='up'):
         super().__init__(x, y, 'pinky', pacman_obj, move_speed, anim_speed, direction)
+        self.start_after = 1
 
     def calc_vectors(self, possible_directions):
         vectors = []
@@ -60,10 +62,11 @@ class Pinky(GhostBase):
 
 
 class Inky(GhostBase):
-    def __init__(self, x, y, pacman_obj, blinky_obj, move_speed=1, anim_speed=10, direction='up'):
+    def __init__(self, x, y, pacman_obj, blinky_obj, move_speed=0, anim_speed=10, direction='up'):
         super().__init__(x, y, 'inky', pacman_obj, move_speed, anim_speed, direction)
 
         self.blinky_obj = blinky_obj
+        self.start_after = 30
 
     def calc_vectors(self, possible_directions):
         vectors = []
@@ -95,8 +98,10 @@ class Inky(GhostBase):
 
 
 class Clyde(GhostBase):
-    def __init__(self, x, y, pacman_obj, move_speed=1, anim_speed=10, direction='up'):
+    def __init__(self, x, y, pacman_obj, move_speed=0, anim_speed=10, direction='up'):
         super().__init__(x, y, 'clyde', pacman_obj, move_speed, anim_speed, direction)
+
+        self.start_after = 100
 
     def calc_vectors(self, possible_directions):
         vectors = []
