@@ -18,8 +18,6 @@ def game(screen):
 
     # clock = pygame.time.Clock()
     # этот параметр нужен для отсчета времени старта
-    counter_pacman = 0
-
     ghosts = [Blinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
               Pinky(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
               Clyde(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman)]
@@ -85,14 +83,10 @@ def game(screen):
             i.process_draw(screen)
             i.set_score(score)
 
-        counter_pacman += 1
-
-        if counter_pacman > 100:
-            pacman.start = True
-
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)
-
+        else:
+            pacman.start = True
 
         pygame.display.flip()
         pygame.time.wait(20)
