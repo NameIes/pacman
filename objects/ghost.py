@@ -213,7 +213,7 @@ class GhostBase:
             self.escape_move()
             return
 
-        if self.scared:
+        if self.scared and self.started:
             self.scared_timer += 1
             if self.scared_timer == self.scared_time:
                 self.scared = False
