@@ -8,6 +8,7 @@ from objects.grain_spawn import spawn_grain, check_and_remove_grain
 from objects.pacman import Pacman, eat_or_be_eated
 from menu import main_menu
 from pause import paused
+from ready import Text, ready
 
 
 def game(screen):
@@ -17,20 +18,25 @@ def game(screen):
 
     # clock = pygame.time.Clock()
     # этот параметр нужен для отсчета времени старта
-    counter_pacman = 0
+    ghosts = [Blinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
+              Pinky(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
+              Clyde(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman)]
 
-    ghosts = [Blinky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
-              Pinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2),
-              Inky(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2),
-              Clyde(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2)]
+    ghosts.append(Inky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman, ghosts[0]))
 
     grain_array = []
     spawn_grain(pole_xy, grain_array)
 
     under_layer = pygame.Surface(size)
     show_field(under_layer, z)
-
+    
     game_over = False
+    pause_flag = False
+
+    display_text_until = pygame.time.get_ticks() + 3000
+    text_object = Text("READY", 90)
+    text_size = text_object.get_text_size()
+    text_object.update_position(size[0] / 2 - text_size[0] / 2, size[1] / 2 - text_size[1] / 2)
 
     while not game_over:
         # clock.tick(FPS)
@@ -71,10 +77,11 @@ def game(screen):
             i.process_logic()
             eat_or_be_eated(pacman, i)
             i.process_draw(screen)
+            i.set_score(score)
 
-        counter_pacman += 1
-
-        if counter_pacman > 100:
+        if pygame.time.get_ticks() < display_text_until:
+            text_object.draw(screen)
+        else:
             pacman.start = True
 
         pygame.display.flip()
