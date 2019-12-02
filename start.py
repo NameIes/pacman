@@ -5,7 +5,7 @@ import pygame
 from objects.ghosts import Blinky, Pinky, Inky, Clyde
 from objects.field import size, pole_xy, show_field, z, is_cell_centre, get_pos_in_field
 from objects.grain_spawn import spawn_grain, check_and_remove_grain
-from objects.pacman import Pacman
+from objects.pacman import Pacman, eat_or_be_eated
 from menu import main_menu
 from pause import paused
 
@@ -69,6 +69,7 @@ def game(screen):
 
         for i in ghosts:
             i.process_logic()
+            eat_or_be_eated(pacman, i)
             i.process_draw(screen)
 
         counter_pacman += 1
