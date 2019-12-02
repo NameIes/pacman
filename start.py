@@ -8,7 +8,8 @@ from objects.grain_spawn import spawn_grain, check_and_remove_grain
 from objects.pacman import Pacman
 from menu import main_menu
 from pause import paused
-from ready import Text
+from ready import Text, ready
+
 
 def game(screen):
     black = (0, 0, 0)
@@ -33,6 +34,12 @@ def game(screen):
     
     game_over = False
     pause_flag = False
+
+    display_text_until = pygame.time.get_ticks() + 3000
+    text_object = Text("READY", 90)
+    text_size = text_object.get_text_size()
+    text_object.update_position(size[0] / 2 - text_size[0] / 2, size[1] / 2 - text_size[1] / 2)
+
     while not game_over:
         # clock.tick(FPS)
         for event in pygame.event.get():
@@ -82,6 +89,10 @@ def game(screen):
 
         if counter_pacman > 100:
             pacman.start = True
+
+        if pygame.time.get_ticks() < display_text_until:
+            text_object.draw(screen)
+
 
         pygame.display.flip()
         pygame.time.wait(20)
