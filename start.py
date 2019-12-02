@@ -57,11 +57,9 @@ def game(screen):
         pacman.action()
         if is_cell_centre(pacman.x, pacman.y):
             pxx, pyy = get_pos_in_field(pacman.x, pacman.y)
-            if check_and_remove_grain(pxx, pyy, grain_array):
-                score += 10
-                res_score = check_and_remove_grain(pxx, pyy, grain_array)
-                if res_score != 0:
-                    score += res_score
+            res_score = check_and_remove_grain(pxx, pyy, grain_array)
+            if res_score != 0:
+                score += res_score
 
         pacman.teleport()
         screen.fill(black)
