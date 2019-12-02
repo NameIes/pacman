@@ -22,6 +22,7 @@ class GhostBase:
     def __init__(self, x, y, ghost_name, pacman_obj, move_speed, anim_speed, direction):
         self.pacman_obj = pacman_obj
 
+        self.started_flag = False
         self.started = False
         self.start_after = 0
         self.score = 0
@@ -191,11 +192,15 @@ class GhostBase:
                 self.direction = possible_directions[ind]
 
     def process_logic(self):
-        if self.started:
+        if self.started and not self.started_flag:
             self.set_move_speed(1)
+            self.started_flag = True
 
         if not self.started and self.score // 10 > self.start_after:
             self.started = True
+
+        if not self.started_flag:
+            return
 
         self.in_field_x, self.in_field_y = get_pos_in_field(self.rect.centerx, self.rect.centery)
 
@@ -213,7 +218,7 @@ class GhostBase:
             self.escape_move()
             return
 
-        if self.scared and self.started:
+        if self.scared:
             self.scared_timer += 1
             if self.scared_timer == self.scared_time:
                 self.scared = False
