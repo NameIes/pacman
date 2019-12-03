@@ -26,7 +26,7 @@ class GhostBase:
         self.started = False
         self.start_after = 0
         self.score = 0
-
+        self.name = ghost_name
         self.images = GhostBase.images[ghost_name]
         self.current_image = self.images[0]
         self.rect = self.current_image.get_rect()
@@ -272,3 +272,16 @@ class GhostBase:
                 self._set_pupil_pos(screen, (4, 9), (16, 9))
             elif self.direction == 'right':
                 self._set_pupil_pos(screen, (8, 9), (20, 9))
+
+    def start_round(self):
+        self.is_dead = False
+        self.is_dead_process = False
+        self.is_dead_path = []
+
+        self.is_dead_timer_started = False
+        self.is_dead_time = 1000
+        self.is_dead_timer = 0
+
+        self.scared = False
+        self.scared_time = 500
+        self.scared_timer = 0

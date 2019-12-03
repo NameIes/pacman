@@ -28,6 +28,12 @@ def game(screen):
     gh_start_x2 = 15 * z + (z - 28) // 2
     gh_start_y1 = 18 * z + (z - 28) // 2
     gh_start_y2 = 17 * z + (z - 28) // 2
+    ghost_start = {
+        "blinky": (gh_start_x1, gh_start_y1),
+        "pinky": (gh_start_x2, gh_start_y1),
+        "clyde": (gh_start_x2, gh_start_y2),
+        "inky": (gh_start_x1, gh_start_y2)
+    }
 
     ghosts = [Blinky(gh_start_x1, gh_start_y1, pacman),
               Pinky(gh_start_x2, gh_start_y1, pacman),
@@ -92,12 +98,24 @@ def game(screen):
             if not i.is_dead:
                 outcome = eat_or_be_eated(pacman, i)
                 if not outcome:
+                    # Смерть пакмана начала нового раунда
                     hp.die()
-                if i.is_dead:
-                    score.update_value(score.value+200)
-                    pass        # Kill reward
+                    pacman.start = False
+                    pacman.x, pacman.y = pacman_start_pos
+                    display_text_until = pygame.time.get_ticks() + 3000
+                    for j in ghosts:
+                        # TODO: можно нужной точкой
+                        j.rect.x, j.rect.y = ghost_start[j.name]
+                        j.start_round()
+                else:
+                    if i.is_dead:
+                        score.update_value(score.value+200)
+                        pass        # Kill reward
             i.process_draw(screen)
-            i.set_score(score.value)
+            if pacman.start:
+                i.set_score(score.value)
+            else:
+                i.set_score(int(0))
 
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)
@@ -114,7 +132,6 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode(size)
     main_menu(screen, game)
-    # game(screen)
 
 
 if __name__ == '__main__':
