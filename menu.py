@@ -69,7 +69,7 @@ def main_menu(screen, game_action=None, high_score_action=None):
         # button(325, 150, 145, 50, bright_blue, blue, screen, game_action)
         button(*btn1, bright_blue, blue, screen, game_action)
         # TODO добавить в строку ниже вызов функции "Таблица Highscores"
-        button(*btn2, bright_blue, blue, screen)
+        button(*btn2, bright_blue, blue, screen, high_score_action)
         button(*btn3, bright_blue, blue, screen, exit)
         text_object1.draw(screen)
         text_object2.draw(screen)

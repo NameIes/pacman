@@ -6,6 +6,7 @@ from objects.ghosts import Blinky, Pinky, Inky, Clyde
 from objects.field import size, pole_xy, show_field, z, is_cell_centre, get_pos_in_field
 from objects.grain_spawn import spawn_grain, check_and_remove_grain
 from objects.pacman import Pacman, eat_or_be_eated
+from highscore import highscore_table
 from menu import main_menu
 from pause import paused
 from ready import Text, ready
@@ -93,7 +94,7 @@ def game(screen):
 def main():
     pygame.init()
     screen = pygame.display.set_mode(size)
-    main_menu(screen, game)
+    main_menu(screen, game, highscore_table)
     # game(screen)
 
 
