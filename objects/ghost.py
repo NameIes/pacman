@@ -197,6 +197,8 @@ class GhostBase:
             self.started_flag = True
 
         if not self.started and self.score // 10 > self.start_after:
+            self.scared = False
+            self.is_dead = False
             self.started = True
 
         if not self.started_flag:
@@ -208,6 +210,7 @@ class GhostBase:
         self.rect.y += self.direction_speed[self.direction][1]
 
         if self.is_dead and is_cell_centre(self.rect.centerx, self.rect.centery):
+            self.scared = False
             if self.is_dead_timer_started:
                 self.death_timer()
             else:
@@ -246,7 +249,7 @@ class GhostBase:
 
                 self.anim_stage = not self.anim_stage
                 self.anim_timer = 0
-        elif self.scared:  # Напуган, когда съедено большое зерно
+        elif self.scared and self.started_flag:  # Напуган, когда съедено большое зерно
             self.current_image = GhostBase.images['scared']
 
     def process_draw(self, screen):
@@ -255,20 +258,17 @@ class GhostBase:
             screen.blit(self.current_image, self.rect)
             self.image_controller()
 
-        # Режим паники
-        if self.scared and not self.is_dead:
-            return
+        if self.is_dead or not self.scared or not self.started_flag:
+            # Глаза
+            pygame.draw.ellipse(screen, (255, 255, 255), (self.rect[0] + 4, self.rect[1] + 6, 8, 10))
+            pygame.draw.ellipse(screen, (255, 255, 255), (self.rect[0] + 16, self.rect[1] + 6, 8, 10))
 
-        # Глаза
-        pygame.draw.ellipse(screen, (255, 255, 255), (self.rect[0] + 4, self.rect[1] + 6, 8, 10))
-        pygame.draw.ellipse(screen, (255, 255, 255), (self.rect[0] + 16, self.rect[1] + 6, 8, 10))
-
-        # Зрачки поворачиваются в сторону движения
-        if self.direction == 'up':
-            self._set_pupil_pos(screen, (6, 6), (18, 6))
-        elif self.direction == 'down':
-            self._set_pupil_pos(screen, (6, 11), (18, 11))
-        elif self.direction == 'left':
-            self._set_pupil_pos(screen, (4, 9), (16, 9))
-        elif self.direction == 'right':
-            self._set_pupil_pos(screen, (8, 9), (20, 9))
+            # Зрачки поворачиваются в сторону движения
+            if self.direction == 'up':
+                self._set_pupil_pos(screen, (6, 6), (18, 6))
+            elif self.direction == 'down':
+                self._set_pupil_pos(screen, (6, 11), (18, 11))
+            elif self.direction == 'left':
+                self._set_pupil_pos(screen, (4, 9), (16, 9))
+            elif self.direction == 'right':
+                self._set_pupil_pos(screen, (8, 9), (20, 9))
