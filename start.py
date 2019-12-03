@@ -9,7 +9,7 @@ from objects.pacman import Pacman, eat_or_be_eated
 from menu import main_menu
 from pause import paused
 from ready import Text, ready
-from objects.uipacman import ScoreLable
+from objects.uipacman import ScoreLable, Health
 
 
 def game(screen):
@@ -17,6 +17,7 @@ def game(screen):
     score = ScoreLable(size[0]//2, 21)
     
     pacman = Pacman(14 * z, 26 * z + z // 2)
+    hp = Health(z/2,size[1]-2*z)
 
     # clock = pygame.time.Clock()
     # этот параметр нужен для отсчета времени старта
@@ -70,7 +71,9 @@ def game(screen):
         pacman.teleport()
         screen.fill(black)
         screen.blit(under_layer, (0, 0))
+
         score.draw(screen)
+        hp.draw(screen)
 
         pacman.draw(screen)
         for grain in grain_array:
