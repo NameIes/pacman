@@ -57,7 +57,7 @@ def check_and_remove_grain(xx, yy, grain_array):
     for grain in grain_array:
         if grain.center_y == y and grain.center_x == x:
             if grain.radius == 7:  # Это на случай вишни
-                print("Eated")
+                # print("Eated")
                 flag_res = 50
             else:
                 flag_res = 10

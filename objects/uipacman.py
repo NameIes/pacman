@@ -37,6 +37,7 @@ class Health:
         self.y = int(y)
 
     def draw(self, screen):
+        "Draw health"
         # rang = list(range(210, 360, 1)) + list(range(0, 150, 1))
         center_x = self.x + self.radius
         center_y = self.y + self.radius
@@ -53,4 +54,7 @@ class Health:
             center_x += 5 + 2 * self.radius
 
     def die(self):
+        "Decrease health"
         self.value -= 1
+        if self.value<0:
+            self.value =0

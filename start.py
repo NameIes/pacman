@@ -81,7 +81,13 @@ def game(screen):
 
         for i in ghosts:
             i.process_logic()
-            eat_or_be_eated(pacman, i)
+            if not i.is_dead:
+                outcome = eat_or_be_eated(pacman, i)
+                if not outcome:
+                    hp.die()
+                if i.is_dead:
+                    score.update_value(score.value+200)
+                    pass        # Kill reward
             i.process_draw(screen)
             i.set_score(score.value)
 
