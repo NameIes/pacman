@@ -1,48 +1,58 @@
 # -*- coding: utf-8 -*-
-
 import sys
 import pygame
 from objects.ghosts import Blinky, Pinky, Inky, Clyde
-from objects.field import size, pole_xy, show_field, z, is_cell_centre, get_pos_in_field
+from objects.field import size, pole_xy, show_field, z, \
+    is_cell_centre, get_pos_in_field
 from objects.grain_spawn import spawn_grain, check_and_remove_grain
 from objects.pacman import Pacman, eat_or_be_eated
 from menu import main_menu
 from pause import paused
-from ready import Text, ready
+from ready import Text
 from objects.uipacman import ScoreLable, Health
 
 
 def game(screen):
     black = (0, 0, 0)
+
+    # Initialize UI
     score = ScoreLable(size[0]//2, 21)
-    
-    pacman = Pacman(14 * z, 26 * z + z // 2)
-    hp = Health(z/2,size[1]-2*z)
+    hp = Health(z/2, size[1]-2*z)
 
-    # clock = pygame.time.Clock()
-    # этот параметр нужен для отсчета времени старта
-    ghosts = [Blinky(12 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
-              Pinky(15 * z + (z - 28) // 2, 18 * z + (z - 28) // 2, pacman),
-              Clyde(15 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman)]
+    # Иницализация Pacman
+    pacman_start_pos = (14 * z, 26 * z + z // 2)
+    pacman = Pacman(*pacman_start_pos)
 
-    ghosts.append(Inky(12 * z + (z - 28) // 2, 17 * z + (z - 28) // 2, pacman, ghosts[0]))
+    # Инициализация Призраков
+    gh_start_x1 = 12 * z + (z - 28) // 2
+    gh_start_x2 = 15 * z + (z - 28) // 2
+    gh_start_y1 = 18 * z + (z - 28) // 2
+    gh_start_y2 = 17 * z + (z - 28) // 2
 
+    ghosts = [Blinky(gh_start_x1, gh_start_y1, pacman),
+              Pinky(gh_start_x2, gh_start_y1, pacman),
+              Clyde(gh_start_x2, gh_start_y2, pacman)]
+
+    ghosts.append(Inky(gh_start_x1, gh_start_y2, pacman, ghosts[0]))
+
+    # Инициализация зерен
     grain_array = []
     spawn_grain(pole_xy, grain_array)
 
+    # Инициализация стенок поля, предв. отрисовка
     under_layer = pygame.Surface(size)
     show_field(under_layer, z)
-    
-    game_over = False
-    pause_flag = False
 
+    game_over = False
+
+    # Инициализацмя надписи READY перед началом раунда
     display_text_until = pygame.time.get_ticks() + 3000
     text_object = Text("READY", 90)
     text_size = text_object.get_text_size()
-    text_object.update_position(size[0] / 2 - text_size[0] / 2, size[1] / 2 - text_size[1] / 2)
+    text_object.update_position(size[0] / 2 - text_size[0] / 2,
+                                size[1] / 2 - text_size[1] / 2)
 
     while not game_over:
-        # clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
@@ -51,13 +61,9 @@ def game(screen):
                     paused(screen)
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
-            # =========================================================== EXAMPLE
-                if pygame.key.get_pressed()[pygame.K_f]:
-                    for i in ghosts:
-                        i.kill()
-            # ===========================================================
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
+
         pacman.action()
         if is_cell_centre(pacman.x, pacman.y):
             pxx, pyy = get_pos_in_field(pacman.x, pacman.y)
@@ -69,6 +75,8 @@ def game(screen):
                         i.scared = True
 
         pacman.teleport()
+
+        # == Отрисовка ==
         screen.fill(black)
         screen.blit(under_layer, (0, 0))
 
