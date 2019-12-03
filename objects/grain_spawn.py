@@ -21,7 +21,7 @@ class Energizer(Grain):
         super().__init__(center_x, center_y)
         self.radius = 7
 
-        # TODO: Переписать класс, так чтобы при отрисовке он менял радиус свой и мигал
+    # TODO: Переписать класс, так чтобы при отрисовке он менял радиус свой и мигал
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.center_x, self.center_y),
                            self.radius)
@@ -58,7 +58,7 @@ def check_and_remove_grain(xx, yy, grain_array):
         if grain.center_y == y and grain.center_x == x:
             if grain.radius == 7:  # Это на случай вишни
                 print("Eated")
-                flag_res = 20
+                flag_res = 50
             else:
                 flag_res = 10
             grain_array.remove(grain)

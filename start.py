@@ -9,11 +9,13 @@ from objects.pacman import Pacman, eat_or_be_eated
 from menu import main_menu
 from pause import paused
 from ready import Text, ready
+from objects.uipacman import ScoreLable
 
 
 def game(screen):
     black = (0, 0, 0)
-    score = 0
+    score = ScoreLable(size[0]//2, 21)
+    
     pacman = Pacman(14 * z, 26 * z + z // 2)
 
     # clock = pygame.time.Clock()
@@ -60,14 +62,15 @@ def game(screen):
             pxx, pyy = get_pos_in_field(pacman.x, pacman.y)
             res_score = check_and_remove_grain(pxx, pyy, grain_array)
             if res_score != 0:
-                score += res_score
-                if res_score == 20:  # Energizer
+                score.update_value(score.value + res_score)
+                if res_score == 50:  # Energizer
                     for i in ghosts:
                         i.scared = True
 
         pacman.teleport()
         screen.fill(black)
         screen.blit(under_layer, (0, 0))
+        score.draw(screen)
 
         pacman.draw(screen)
         for grain in grain_array:
@@ -77,7 +80,7 @@ def game(screen):
             i.process_logic()
             eat_or_be_eated(pacman, i)
             i.process_draw(screen)
-            i.set_score(score)
+            i.set_score(score.value)
 
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)
