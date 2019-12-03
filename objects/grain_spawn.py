@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 import sys
-from .field import pole_xy, get_pos_in_field, z, size
+from objects.field import pole_xy, z, size
 
 
 class Grain:
@@ -38,7 +38,16 @@ def spawn_grain(pole_xy, grain_array):
                 if (i == 6 or i == 26) and (j == 1 or j == 26):
                     grain_array.append(Energizer(x, y))
                 else:
-                    grain_array.append(Grain(x, y))
+                    if ((i == 17) and (j < 6)):
+                        pass
+                    elif ((i == 17) and (j > 21)):
+                        pass
+                    elif (i > 11 and i < 23) and (j > 7 and j < 21):
+                        pass
+                    elif j == 14 and i == 26:
+                        pass
+                    else:
+                        grain_array.append(Grain(x, y))
 
 
 def check_and_remove_grain(xx, yy, grain_array):
