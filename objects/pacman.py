@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import pygame
-import sys
 import math
 import pygame.gfxdraw
 from objects.field import pole_xy, z, is_cell_centre, get_pos_in_field
+from objects.ghost import GhostBase
 
 yellow = 255, 255, 0
 
@@ -226,7 +226,6 @@ class Pacman:
 
     def teleport(self):
         xx, yy = get_pos_in_field(self.x, self.y)
-        flag_center = is_cell_centre(self.x, self.y)
         R = True
         if pole_xy[yy][xx - 1] == 8 and R:
             self.x = 346
@@ -239,3 +238,33 @@ class Pacman:
             R = False
 
 
+def eat_or_be_eated(pacman, ghost):
+    """Варианты исхода
+    пакман наезжает или наезжает него наезжает приведение
+    исхода пакман мертв - false
+
+    пакман пересекается с напуганнымм приведением
+    и мы его сеъедаем если наезжаем наезжаем него
+
+    не забыть умножение награды забыть приведение забыть каждое
+    съедение подряд.
+    """
+    pacman_live = True
+    death_radius = 4
+    px = pacman.x
+    py = pacman.y
+
+    gx = ghost.rect.centerx
+    gy = ghost.rect.centery
+
+    if (abs(px-gx) <= death_radius) and (abs(py-gy) <= death_radius):
+        if ghost.scared:
+            print("Pacman Eated Ghost")
+            ghost.kill()
+        elif ghost.is_dead:
+            print("Toching dead things")
+        else:
+            print("You died")
+            pacman_live = False
+
+    return pacman_live

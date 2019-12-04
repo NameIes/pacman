@@ -1,47 +1,127 @@
-import pygame
 from objects.ghost import GhostBase
+from objects.field import get_pos_in_field
+from copy import deepcopy
 
 
 class Blinky(GhostBase):
-    def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None, speed=1):
-        super().__init__(x, y, direction, anim_speed, pacman_rect, speed)
-        self.images = [pygame.image.load('res/img/blinky_0.png'),
-                       pygame.image.load('res/img/blinky_1.png')]
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+    def __init__(self, x, y, pacman_obj, move_speed=0, anim_speed=10, direction='up'):
+        super().__init__(x, y, 'blinky', pacman_obj, move_speed, anim_speed, direction)
+        self.start_after = 1
 
+    def calc_vectors(self, possible_directions):
+        vectors = []
+        for dirs in possible_directions:
+            gx, gy = self.in_field_x, self.in_field_y
+            px, py = get_pos_in_field(self.pacman_obj.x, self.pacman_obj.y)
+            if dirs == 'left':
+                gx -= 1
+            if dirs == 'right':
+                gx += 1
+            if dirs == 'up':
+                gy -= 1
+            if dirs == 'down':
+                gy += 1
 
-# При создании отдельного алгоритма движения, можно будет отнаследовать от Blinky
-class Clyde(GhostBase):
-    def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None, speed=1):
-        super().__init__(x, y, direction, anim_speed, pacman_rect, speed)
-        self.images = [pygame.image.load('res/img/clyde_0.png'),
-                       pygame.image.load('res/img/clyde_1.png')]
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+            vectors.append(int(((gx - px)**2 + (gy - py)**2)**0.5))
 
-
-class Inky(GhostBase):
-    def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None, speed=1):
-        super().__init__(x, y, direction, anim_speed, pacman_rect, speed)
-        self.images = [pygame.image.load('res/img/inky_0.png'),
-                       pygame.image.load('res/img/inky_1.png')]
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        return vectors
 
 
 class Pinky(GhostBase):
-    def __init__(self, x, y, direction='up', anim_speed=10, pacman_rect=None, speed=1):
-        super().__init__(x, y, direction, anim_speed, pacman_rect, speed)
-        self.images = [pygame.image.load('res/img/pinky_0.png'),
-                       pygame.image.load('res/img/pinky_1.png')]
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+    def __init__(self, x, y, pacman_obj, move_speed=0, anim_speed=10, direction='up'):
+        super().__init__(x, y, 'pinky', pacman_obj, move_speed, anim_speed, direction)
+        self.start_after = 1
+
+    def calc_vectors(self, possible_directions):
+        vectors = []
+        for dirs in possible_directions:
+            gx, gy = self.in_field_x, self.in_field_y
+            px, py = get_pos_in_field(self.pacman_obj.x, self.pacman_obj.y)
+
+            if self.pacman_obj.direction == 'w':
+                py -= 4
+            if self.pacman_obj.direction == 'a':
+                px -= 4
+            if self.pacman_obj.direction == 's':
+                py += 4
+            if self.pacman_obj.direction == 'd':
+                px += 4
+
+            if dirs == 'left':
+                gx -= 1
+            if dirs == 'right':
+                gx += 1
+            if dirs == 'up':
+                gy -= 1
+            if dirs == 'down':
+                gy += 1
+
+            vectors.append(int(((gx - px)**2 + (gy - py)**2)**0.5))
+
+        return vectors
+
+
+class Inky(GhostBase):
+    def __init__(self, x, y, pacman_obj, blinky_obj, move_speed=0, anim_speed=10, direction='up'):
+        super().__init__(x, y, 'inky', pacman_obj, move_speed, anim_speed, direction)
+
+        self.blinky_obj = blinky_obj
+        self.start_after = 30
+
+    def calc_vectors(self, possible_directions):
+        vectors = []
+        for dirs in possible_directions:
+            gx, gy = deepcopy(self.blinky_obj.in_field_x), deepcopy(self.blinky_obj.in_field_y)
+            px, py = get_pos_in_field(self.pacman_obj.x, self.pacman_obj.y)
+
+            if self.pacman_obj.direction == 'w':
+                py -= 2
+            if self.pacman_obj.direction == 'a':
+                px -= 2
+            if self.pacman_obj.direction == 's':
+                py += 2
+            if self.pacman_obj.direction == 'd':
+                px += 2
+
+            if dirs == 'left':
+                gx -= 1
+            if dirs == 'right':
+                gx += 1
+            if dirs == 'up':
+                gy -= 1
+            if dirs == 'down':
+                gy += 1
+
+            vectors.append(int(((gx - px)**2 + (gy - py)**2)**0.5) * 2)
+
+        return vectors
+
+
+class Clyde(GhostBase):
+    def __init__(self, x, y, pacman_obj, move_speed=0, anim_speed=10, direction='up'):
+        super().__init__(x, y, 'clyde', pacman_obj, move_speed, anim_speed, direction)
+
+        self.start_after = 100
+
+    def calc_vectors(self, possible_directions):
+        vectors = []
+        for dirs in possible_directions:
+            gx, gy = self.in_field_x, self.in_field_y
+            px, py = get_pos_in_field(self.pacman_obj.x, self.pacman_obj.y)
+            if dirs == 'left':
+                gx -= 1
+            if dirs == 'right':
+                gx += 1
+            if dirs == 'up':
+                gy -= 1
+            if dirs == 'down':
+                gy += 1
+
+            vector = int(((gx - px) ** 2 + (gy - py) ** 2) ** 0.5)
+
+            if vector < 8:
+                vectors.append(vector)
+            else:
+                vectors.append(int(((gx - 1) ** 2 + (gy - 35) ** 2) ** 0.5))
+
+        return vectors

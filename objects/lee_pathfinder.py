@@ -16,7 +16,7 @@ def push_wave(y, x, lvl, h, w, field, end, isf=False):
     field[y][x] = lvl
 
     if (y, x) == end:
-        isf=True
+        isf = True
     if isf:
         return field
 
@@ -44,7 +44,7 @@ def get_path(start, finish, field, h, w):
     item = finish
     while not path.append(item[::-1]) and item != start:
         r = (item[0] + 1, item[1])
-        if r[0] < h and field[r[0]][r[1]] == field[item[0]][item[1]] - 1:
+        if r[0] < w and field[r[0]][r[1]] == field[item[0]][item[1]] - 1:
             item = r
             continue
 
@@ -59,7 +59,7 @@ def get_path(start, finish, field, h, w):
             continue
 
         d = (item[0], item[1] + 1)
-        if d[1] < w and field[d[0]][d[1]] == field[item[0]][item[1]] - 1:
+        if d[1] < h and field[d[0]][d[1]] == field[item[0]][item[1]] - 1:
             item = d
             continue
 

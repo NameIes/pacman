@@ -13,6 +13,10 @@ class Text:
     def update_position(self, x, y):
         self.position = (x, y)
 
+    def update_text(self, text):
+        self.data = str(text)
+        self.surface = self.font.render(self.data, True, self.color)
+
     def get_text_size(self):
         r = self.surface.get_rect()
         return [r.width, r.height]
