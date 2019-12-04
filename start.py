@@ -50,7 +50,6 @@ def game(screen):
     hp.draw(under_layer)
 
     game_over = False
-    pause_flag = False
 
     # Инициализацмя надписи READY перед началом раунда
     display_text_until = pygame.time.get_ticks() + 3000
@@ -60,7 +59,6 @@ def game(screen):
                                 size[1] / 2 - text_size[1] / 2)
 
     while not game_over:
-        # clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
@@ -69,11 +67,6 @@ def game(screen):
                     paused(screen)
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 pacman.reaction(event)
-            # =========================================================== EXAMPLE
-                if pygame.key.get_pressed()[pygame.K_f]:
-                    for i in ghosts:
-                        i.kill()
-            # ===========================================================
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(pygame.mouse.get_pos())
 
