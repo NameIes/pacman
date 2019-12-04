@@ -157,10 +157,14 @@ def game(screen):
 
         if hp.value == 0:
             game_over = True
+            htable = HighscoreTable()
+            htable.add_new_score(score.value)
             pass  # TODO: Поражение
 
         if len(grain_array) == 0:
             game_over = True
+            htable = HighscoreTable()
+            htable.add_new_score(score.value)
             pass  # TODO: Победа
 
     sys.exit(0)

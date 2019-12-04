@@ -49,19 +49,20 @@ class HighscoreTable:
             score_added = reduce(lambda x, y: x or y, lower_then)
             self.data[-1] = int(score)
 
-            if score_added:
-                self.data = sorted(self.data, reverse=True)
-                for i in range(10):
-                    if i < len(self.data):
-                        s = str(self.data[i])
-                    else:
-                        s = " -- "
-                    self.text_array[i+1].update_text(str(i + 1) + '.   ' + s)
+        if score_added:
+            self.data = sorted(self.data, reverse=True)
+            for i in range(10):
+                if i < len(self.data):
+                    s = str(self.data[i])
+                else:
+                    s = " -- "
+                self.text_array[i+1].update_text(str(i + 1) + '.   ' + s)
 
-                self.max_score = self.data[0]
-                with open('records.txt', 'w') as f:
-                    for i in self.data:
-                        f.write(str(i)+' ')
+            self.max_score = self.data[0]
+            print("Write new score into table_score")
+            with open('records.txt', 'w') as f:
+                for i in self.data:
+                    f.write(str(i)+' ')
 
 
 def highscore_table(screen):
