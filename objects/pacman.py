@@ -259,7 +259,10 @@ def eat_or_be_eated(pacman, ghost):
 
     if (abs(px-gx) <= death_radius) and (abs(py-gy) <= death_radius):
         if ghost.scared:
+            print("Pacman Eated Ghost")
             ghost.kill()
+        elif ghost.is_dead:
+            print("Toching dead things")
         else:
             print("You died")
             pacman_live = False

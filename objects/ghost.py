@@ -26,7 +26,7 @@ class GhostBase:
         self.started = False
         self.start_after = 0
         self.score = 0
-
+        self.name = ghost_name
         self.images = GhostBase.images[ghost_name]
         self.current_image = self.images[0]
         self.rect = self.current_image.get_rect()
