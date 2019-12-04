@@ -6,7 +6,7 @@ from objects.field import size, pole_xy, show_field, z, \
     is_cell_centre, get_pos_in_field
 from objects.grain_spawn import spawn_grain, check_and_remove_grain
 from objects.pacman import Pacman, eat_or_be_eated
-from highscore import highscore_table
+from highscore import highscore_table, HighscoreTable
 from menu import main_menu
 from pause import paused
 from ready import Text
@@ -15,11 +15,23 @@ from objects.uipacman import ScoreLable, Health
 
 def game(screen):
     black = (0, 0, 0)
-    score = 0
     pacman = Pacman(14 * z, 26 * z + z // 2)
 
     # Initialize UI
-    score = ScoreLable(size[0] // 2, 21)
+    htable = HighscoreTable()
+    max_score = htable.max_score
+    highscore_labl = Text("high score", 18)
+    highscore = Text(str(max_score), 18)
+
+    txt_size = highscore_labl.get_text_size()
+    highscore_labl.update_position(size[0] * 3 // 4 - txt_size[0] / 2, 0)
+    txt_size = highscore.get_text_size()
+    highscore.update_position(size[0] * 3 // 4 - txt_size[0] / 2, 21)
+    del (htable)
+    score_labl = Text("score", 20)
+    txt_size = score_labl.get_text_size()
+    score_labl.update_position(size[0] // 4 - txt_size[0] / 2, 0)
+    score = ScoreLable(size[0] // 4, 32)
     hp = Health(z / 2, size[1] - 2 * z)
 
     # Иницализация Pacman
@@ -45,9 +57,13 @@ def game(screen):
     spawn_grain(pole_xy, grain_array)
 
     # Инициализация стенок поля, предв. отрисовка
+    # отрисовка ui
     under_layer = pygame.Surface(size)
     show_field(under_layer, z)
     hp.draw(under_layer)
+    highscore_labl.draw(under_layer)
+    highscore.draw(under_layer)
+    score_labl.draw(under_layer)
 
     game_over = False
 
@@ -127,6 +143,9 @@ def game(screen):
             under_layer.fill(black)
             show_field(under_layer, z)
             hp.draw(under_layer)
+            highscore_labl.draw(under_layer)
+            highscore.draw(under_layer)
+            score_labl.draw(under_layer)
 
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)

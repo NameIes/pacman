@@ -8,7 +8,7 @@ yellow = 255, 255, 0
 class ScoreLable:
     def __init__(self, center_x, center_y):
         self.value = 0
-        self.font_size = 14
+        self.font_size = 18
         self.text = Text("00", self.font_size)
         tsize = self.text.get_text_size()
         self.text.update_position(center_x - tsize[0] / 2,
