@@ -28,12 +28,6 @@ def game(screen):
     gh_start_x2 = 15 * z + (z - 28) // 2
     gh_start_y1 = 18 * z + (z - 28) // 2
     gh_start_y2 = 17 * z + (z - 28) // 2
-    ghost_start = {
-        "blinky": (gh_start_x1, gh_start_y1),
-        "pinky": (gh_start_x2, gh_start_y1),
-        "clyde": (gh_start_x2, gh_start_y2),
-        "inky": (gh_start_x1, gh_start_y2)
-    }
 
     ghosts = [Blinky(gh_start_x1, gh_start_y1, pacman),
               Pinky(gh_start_x2, gh_start_y1, pacman),
@@ -93,29 +87,37 @@ def game(screen):
         for grain in grain_array:
             grain.draw(screen)
 
-        for i in ghosts:
-            i.process_logic()
-            if not i.is_dead:
-                outcome = eat_or_be_eated(pacman, i)
-                if not outcome:
+        start_round = False
+        i = 0
+        while (i < len(ghosts)) and (not start_round):
+            ghost = ghosts[i]
+            ghost.process_logic()
+            if not ghost.is_dead:
+                pacman_live = eat_or_be_eated(pacman, ghost)
+                if pacman_live:
+                    if ghost.is_dead:
+                        score.update_value(score.value+200)
+                        # TODO: множетель убийств
+                else:
                     # Смерть пакмана начала нового раунда
                     hp.die()
-                    pacman.start = False
-                    pacman.x, pacman.y = pacman_start_pos
                     display_text_until = pygame.time.get_ticks() + 3000
-                    for j in ghosts:
-                        # TODO: можно нужной точкой
-                        j.rect.x, j.rect.y = ghost_start[j.name]
-                        j.start_round()
-                else:
-                    if i.is_dead:
-                        score.update_value(score.value+200)
-                        pass        # Kill reward
-            i.process_draw(screen)
+                    start_round = True
+            ghost.process_draw(screen)
             if pacman.start:
-                i.set_score(score.value)
+                ghost.set_score(score.value)
             else:
-                i.set_score(int(0))
+                ghost.set_score(0)
+            i += 1
+
+        if start_round:
+            # TODO: Измение жизней перирисовка подложки
+            pacman = Pacman(*pacman_start_pos)
+            ghosts = [Blinky(gh_start_x1, gh_start_y1, pacman),
+                      Pinky(gh_start_x2, gh_start_y1, pacman),
+                      Clyde(gh_start_x2, gh_start_y2, pacman)]
+            ghosts.append(Inky(gh_start_x1, gh_start_y2, pacman, ghosts[0]))
+            start_round = False
 
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)
