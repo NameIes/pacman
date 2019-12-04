@@ -16,8 +16,8 @@ def game(screen):
     black = (0, 0, 0)
 
     # Initialize UI
-    score = ScoreLable(size[0]//2, 21)
-    hp = Health(z/2, size[1]-2*z)
+    score = ScoreLable(size[0] // 2, 21)
+    hp = Health(z / 2, size[1] - 2 * z)
 
     # Иницализация Pacman
     pacman_start_pos = (14 * z, 26 * z + z // 2)
@@ -29,9 +29,11 @@ def game(screen):
     gh_start_y1 = 18 * z + (z - 28) // 2
     gh_start_y2 = 17 * z + (z - 28) // 2
 
-    ghosts = [Blinky(gh_start_x1, gh_start_y1, pacman),
-              Pinky(gh_start_x2, gh_start_y1, pacman),
-              Clyde(gh_start_x2, gh_start_y2, pacman)]
+    ghosts = [
+        Blinky(gh_start_x1, gh_start_y1, pacman),
+        Pinky(gh_start_x2, gh_start_y1, pacman),
+        Clyde(gh_start_x2, gh_start_y2, pacman)
+    ]
 
     ghosts.append(Inky(gh_start_x1, gh_start_y2, pacman, ghosts[0]))
 
@@ -42,6 +44,7 @@ def game(screen):
     # Инициализация стенок поля, предв. отрисовка
     under_layer = pygame.Surface(size)
     show_field(under_layer, z)
+    hp.draw(under_layer)
 
     game_over = False
 
@@ -81,7 +84,6 @@ def game(screen):
         screen.blit(under_layer, (0, 0))
 
         score.draw(screen)
-        hp.draw(screen)
 
         pacman.draw(screen)
         for grain in grain_array:
@@ -96,7 +98,7 @@ def game(screen):
                 pacman_live = eat_or_be_eated(pacman, ghost)
                 if pacman_live:
                     if ghost.is_dead:
-                        score.update_value(score.value+200)
+                        score.update_value(score.value + 200)
                         # TODO: множетель убийств
                 else:
                     # Смерть пакмана начала нового раунда
@@ -111,13 +113,17 @@ def game(screen):
             i += 1
 
         if start_round:
-            # TODO: Измение жизней перирисовка подложки
             pacman = Pacman(*pacman_start_pos)
-            ghosts = [Blinky(gh_start_x1, gh_start_y1, pacman),
-                      Pinky(gh_start_x2, gh_start_y1, pacman),
-                      Clyde(gh_start_x2, gh_start_y2, pacman)]
+            ghosts = [
+                Blinky(gh_start_x1, gh_start_y1, pacman),
+                Pinky(gh_start_x2, gh_start_y1, pacman),
+                Clyde(gh_start_x2, gh_start_y2, pacman)
+            ]
             ghosts.append(Inky(gh_start_x1, gh_start_y2, pacman, ghosts[0]))
             start_round = False
+            under_layer.fill(black)
+            show_field(under_layer, z)
+            hp.draw(under_layer)
 
         if pygame.time.get_ticks() < display_text_until:
             text_object.draw(screen)
@@ -126,6 +132,14 @@ def game(screen):
 
         pygame.display.flip()
         pygame.time.wait(20)
+
+        if hp.value == 0:
+            game_over = True
+            pass  # TODO: Поражение
+
+        if len(grain_array) == 0:
+            game_over = True
+            pass  # TODO: Победа
 
     sys.exit(0)
 

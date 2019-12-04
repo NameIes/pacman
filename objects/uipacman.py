@@ -32,29 +32,28 @@ class Health:
     def __init__(self, x, y):
         self.start_value = 3
         self.value = self.start_value
-        self.radius = int(13)
+        self.radius = int(12)
         self.x = int(x)
         self.y = int(y)
 
     def draw(self, screen):
         "Draw health"
-        # rang = list(range(210, 360, 1)) + list(range(0, 150, 1))
+        rang = list(range(210, 360)) + list(range(0, 150))
         center_x = self.x + self.radius
         center_y = self.y + self.radius
 
         for i in range(self.value):
-            pygame.draw.circle(screen, yellow, (center_x, center_y), self.radius)
-            #    p = [(center_x, center_y)]
-            #     for n in rang:
-            #         x1 = center_x + int(self.radius * math.cos(n * math.pi / 180))
-            #         y1 = center_y + int(self.radius * math.sin(n * math.pi / 180))
-            #         p.append((x1, y1))
-            #         p.append((center_x, center_y))
-            #         pygame.gfxdraw.filled_polygon(screen, p, yellow)
+            p = [(center_x, center_y)]
+            for n in rang:
+                x1 = int(center_x + self.radius * math.cos(n * math.pi / 180))
+                y1 = int(center_y + self.radius * math.sin(n * math.pi / 180))
+                p.append((x1, y1))
+                # p.append((center_x, center_y))
+            pygame.gfxdraw.filled_polygon(screen, p, yellow)
             center_x += 5 + 2 * self.radius
 
     def die(self):
         "Decrease health"
         self.value -= 1
-        if self.value<0:
-            self.value =0
+        if self.value < 0:
+            self.value = 0
