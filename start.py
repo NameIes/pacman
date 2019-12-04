@@ -97,6 +97,7 @@ def game(screen):
                 if res_score == 50:  # Energizer
                     for i in ghosts:
                         i.scared = True
+                        i.scared_timer = 0
 
         pacman.teleport()
 
