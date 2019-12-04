@@ -139,11 +139,12 @@ def game(screen):
             htable = HighscoreTable()
             htable.add_new_score(score.value)
             wine = (255, 0, 0)
-            txt = Text('You Lose!', 40, 0, 0, wine)
+            txt = Text('You Lose!', 60, 0, 0, wine)
             txt_size = txt.get_text_size()
             txt.update_position(size[0] / 2 - txt_size[0] / 2,
                                 size[1] / 2 - txt_size[1] / 2)
             txt.draw(screen)
+            pygame.display.flip()
             pygame.time.delay(3000)
 
         if len(grain_array) == 0:
@@ -151,11 +152,12 @@ def game(screen):
             htable = HighscoreTable()
             htable.add_new_score(score.value)
             yellow = (255, 255, 0)
-            txt = Text('You Win!', 40, 0, 0, yellow)
+            txt = Text('You Win!', 60, 0, 0, yellow)
             txt_size = txt.get_text_size()
             txt.update_position(size[0] / 2 - txt_size[0] / 2,
                                 size[1] / 2 - txt_size[1] / 2)
             txt.draw(screen)
+            pygame.display.flip()
             pygame.time.delay(3000)
 
         if start_round:
